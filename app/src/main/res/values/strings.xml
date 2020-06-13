@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">RSS Reader</string>
+    <string name="preference_file_key">PREFERENCE_FILE_KEY</string>
+</resources>
