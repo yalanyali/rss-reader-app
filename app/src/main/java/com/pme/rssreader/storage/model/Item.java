@@ -5,8 +5,10 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(indices = {@Index(value = {"guid"}, unique = true)})
-public class Item {
+public class Item implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private long id;
 
@@ -19,6 +21,8 @@ public class Item {
     private String link;
 
     private String pubDate;
+
+    private String content;
 
     private String description;
 
@@ -85,5 +89,13 @@ public class Item {
 
     public void setGuid(String guid) {
         this.guid = guid;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

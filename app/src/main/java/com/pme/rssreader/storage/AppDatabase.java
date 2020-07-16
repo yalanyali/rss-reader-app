@@ -25,7 +25,6 @@ public abstract class AppDatabase extends RoomDatabase {
     static final ExecutorService databaseWriteExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
-
     private static volatile AppDatabase INSTANCE;
 
     static AppDatabase getDatabase(final Context context) {

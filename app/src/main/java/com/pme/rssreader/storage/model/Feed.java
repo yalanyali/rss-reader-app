@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity
-public class Feed {
+public class Feed implements Serializable {
     @PrimaryKey(autoGenerate = true)
     private long feedId;
 

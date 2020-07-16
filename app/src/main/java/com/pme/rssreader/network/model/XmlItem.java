@@ -3,6 +3,8 @@ package com.pme.rssreader.network.model;
 import com.pme.rssreader.storage.model.Item;
 
 import org.simpleframework.xml.Element;
+import org.simpleframework.xml.Namespace;
+import org.simpleframework.xml.NamespaceList;
 import org.simpleframework.xml.Root;
 
 @Root(name = "item", strict = false)
@@ -15,6 +17,12 @@ public class XmlItem {
 
     @Element(required = false)
     public String pubDate;
+
+    @Element(name= "content", required = false)
+    public String content;
+
+    @Element(name= "encoded", required = false)
+    public String encodedContent;
 
     @Element(required = false)
     public String description;
@@ -36,6 +44,11 @@ public class XmlItem {
         i.setPubDate(pubDate);
         if (guid != null) {
             i.setGuid(guid);
+        }
+        if (encodedContent != null) {
+            i.setContent(encodedContent);
+        } else {
+            i.setContent(content);
         }
         return i;
     }

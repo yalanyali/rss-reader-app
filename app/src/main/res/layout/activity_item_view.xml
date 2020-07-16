@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/item_view_swipe_container"
+    tools:context=".view.itemview.ItemViewActivity">
+    
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/item_view_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:showIn="@layout/activity_item_view"
+        tools:context=".view.itemview.ItemViewActivity" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/disconnected" />
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
