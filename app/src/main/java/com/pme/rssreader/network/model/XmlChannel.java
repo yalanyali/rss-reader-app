@@ -6,7 +6,7 @@ import org.simpleframework.xml.Root;
 
 import java.util.List;
 
-@Root(name = "channel", strict = false)
+@Root(strict = false)
 public class XmlChannel
 {
     @Element

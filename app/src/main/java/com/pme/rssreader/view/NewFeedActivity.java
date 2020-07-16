@@ -35,7 +35,7 @@ public class NewFeedActivity extends AppCompatActivity {
         linkText = findViewById(R.id.text_input_new_feed_link);
 
         // Repo
-        feedRepository = new FeedRepository(getApplication());
+        feedRepository = FeedRepository.getRepository(getApplication());
     }
 
     private View.OnClickListener buttonClickListener = new View.OnClickListener() {

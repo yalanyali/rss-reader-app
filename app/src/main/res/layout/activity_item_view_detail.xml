@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.itemview.ItemViewDetailActivity"
+    android:padding="@dimen/big_padding">
+
+    <TextView
+        android:id="@+id/item_view_detail_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Item Title"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/item_view_detail_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item_view_detail_title"
+        android:layout_marginTop="10dp"
+        android:text="3 hours ago"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/item_view_detail_content"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_below="@+id/item_view_detail_date"
+        android:layout_marginTop="10dp"
+        android:text="Item content.. Long.."
+        android:textSize="16sp"
+        android:scrollbars = "vertical" />
+
+
+    <Button
+        android:id="@+id/item_view_detail_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/item_view_detail_content"
+        android:layout_marginTop="10dp"
+        android:text="Visit website" />
+
+</RelativeLayout>
