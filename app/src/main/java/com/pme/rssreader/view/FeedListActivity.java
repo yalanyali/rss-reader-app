@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.pme.rssreader.R;
 import com.pme.rssreader.storage.FeedRepository;
 import com.pme.rssreader.view.adapter.FeedListAdapter;
-import com.pme.rssreader.view.itemview.ItemViewActivity;
+import com.pme.rssreader.view.item.list.ItemListActivity;
 
 public class FeedListActivity extends AppCompatActivity {
 
@@ -102,11 +102,11 @@ public class FeedListActivity extends AppCompatActivity {
 
 
         this.feedListViewModel.getAllFeeds().observe(this, adapter::setFeeds);
-        this.feedListViewModel.getItemSelectedEvent().observe(this, itemId -> {
-            Log.w("SELECTED_ITEM_ID", String.valueOf(itemId));
+        this.feedListViewModel.getItemSelectedEvent().observe(this, feedId -> {
+            Log.w("SELECTED_FEED_ID", String.valueOf(feedId));
             FeedRepository.getRepository(getApplication()).refreshFeeds();
-            Intent i = new Intent(this, ItemViewActivity.class);
-            i.putExtra("SELECTED_ITEM_ID", itemId);
+            Intent i = new Intent(this, ItemListActivity.class);
+            i.putExtra("SELECTED_FEED_ID", feedId);
             startActivity(i);
         });
 
