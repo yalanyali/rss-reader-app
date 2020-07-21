@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.pme.rssreader.R;
+import com.pme.rssreader.view.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
             } else if (v.getId() == R.id.btn_new_feed) {
                 Log.i(LOG_TAG_EVENTS, "btn_new_feed tapped");
                 goToNewFeedActivity();
+            } else if (v.getId() == R.id.btn_to_settings) {
+                Log.i(LOG_TAG_EVENTS, "btn_to_settings tapped");
+                goToSettingsActivity();
             }
         }
     };
@@ -46,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         toFeedList.setOnClickListener(this.buttonClickListener);
         Button toNewFeed = findViewById(R.id.btn_new_feed);
         toNewFeed.setOnClickListener(this.buttonClickListener);
+        Button toSettings = findViewById(R.id.btn_to_settings);
+        toSettings.setOnClickListener(this.buttonClickListener);
     }
 
     private void goToFeedListActivity() {
@@ -57,6 +63,12 @@ public class MainActivity extends AppCompatActivity {
     private void goToNewFeedActivity() {
         Log.i(LOG_TAG_EVENTS, "Switching to New Feed Activity");
         Intent i = new Intent(MainActivity.this, NewFeedActivity.class);
+        startActivity(i);
+    }
+
+    private void goToSettingsActivity() {
+        Log.i(LOG_TAG_EVENTS, "Switching to Settings Activity");
+        Intent i = new Intent(MainActivity.this, SettingsActivity.class);
         startActivity(i);
     }
 

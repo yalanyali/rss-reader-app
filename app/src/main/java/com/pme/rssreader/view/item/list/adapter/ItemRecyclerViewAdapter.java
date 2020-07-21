@@ -1,4 +1,4 @@
-package com.pme.rssreader.view.itemview.adapter;
+package com.pme.rssreader.view.item.list.adapter;
 
 
 import android.content.Context;
@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.pme.rssreader.R;
 import com.pme.rssreader.storage.model.Item;
-import com.pme.rssreader.view.itemview.ItemViewViewModel;
+import com.pme.rssreader.view.item.list.ItemViewModel;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -24,14 +24,14 @@ import java.util.List;
 import java.util.Locale;
 
 
-public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemViewViewHolder> {
+public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerViewAdapter.ViewHolder> {
 
-    class ItemViewViewHolder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView date;
         private final TextView content;
 
-        private ItemViewViewHolder(View itemView) {
+        private ViewHolder(View itemView) {
             super(itemView);
             this.title = itemView.findViewById(R.id.row_item_title);
             this.date = itemView.findViewById(R.id.row_item_date);
@@ -41,24 +41,24 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
 
     private final LayoutInflater inflater;
     private List<Item> items;
-    private ItemViewViewModel viewModel;
+    private ItemViewModel viewModel;
 
     private DateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
 
-    public ItemViewAdapter(Context context, ItemViewViewModel viewModel, int feedId) {
+    public ItemRecyclerViewAdapter(Context context, ItemViewModel viewModel, int feedId) {
         this.inflater = LayoutInflater.from(context);
         this.viewModel = viewModel;
     }
 
     @NonNull
     @Override
-    public ItemViewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = inflater.inflate(R.layout.row_item, parent, false);
-        return new ItemViewViewHolder(itemView);
+        return new ViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ItemViewViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if (this.items != null) {
             Item current = items.get(position);
             holder.title.setText(current.getTitle());

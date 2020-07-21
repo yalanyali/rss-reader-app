@@ -2,12 +2,16 @@ package com.pme.rssreader.storage.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
 
-@Entity
+@Entity(indices = {
+    @Index(value = { "link", "name" }, unique = true)
+})
 public class Feed implements Serializable {
+
     @PrimaryKey(autoGenerate = true)
     private long feedId;
 

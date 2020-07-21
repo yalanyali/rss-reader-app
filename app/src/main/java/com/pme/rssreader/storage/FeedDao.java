@@ -19,8 +19,12 @@ import java.util.List;
 @Dao
 public abstract class FeedDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     public abstract void insert(Feed feed);
+
+//    public void insertOrUpdate(Feed feed) {
+//        List<Feed> feeds = g
+//    }
 
     @Query("DELETE FROM Feed")
     public abstract void deleteAll();
