@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.method.LinkMovementMethod;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -42,7 +43,8 @@ public class ItemViewDetailActivity extends AppCompatActivity {
             } else {
                 content.setText(HtmlCompat.fromHtml(currentItem.getDescription(), HtmlCompat.FROM_HTML_MODE_LEGACY));
             }
-            content.setMovementMethod(new ScrollingMovementMethod());
+            // To enable scrolling and clickable links
+            content.setMovementMethod(LinkMovementMethod.getInstance());
             date.setText(currentItem.getPubDate());
 
             button.setOnClickListener(view -> {

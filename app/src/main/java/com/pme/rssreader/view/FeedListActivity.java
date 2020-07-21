@@ -3,6 +3,8 @@ package com.pme.rssreader.view;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -17,6 +19,7 @@ import com.pme.rssreader.view.itemview.ItemViewActivity;
 public class FeedListActivity extends AppCompatActivity {
 
     private FeedListViewModel feedListViewModel;
+    private TextView placeholderText;
 
     public static final String LOG_TAG_NETWORK = "Network";
 
@@ -24,6 +27,8 @@ public class FeedListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed_list);
+
+        placeholderText = findViewById(R.id.text_placeholder);
 
         // Init ViewModel
         this.feedListViewModel =  new ViewModelProvider(this,
@@ -36,6 +41,9 @@ public class FeedListActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
+        if (adapter.getItemCount() == 0) {
+            placeholderText.setVisibility(View.INVISIBLE);
+        }
 
 //        this.feedListViewModel.
 

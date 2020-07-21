@@ -4,7 +4,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="90dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -20,19 +20,17 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:padding="@dimen/small_padding">
 
             <TextView
                 android:id="@+id/list_item_feed_name_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="13px"
                 android:text="NAME"
-                android:textSize="14pt"
+                android:textSize="10pt"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
@@ -41,13 +39,12 @@
                 android:id="@+id/list_item_feed_link_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="13px"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:text="LINK"
                 android:textSize="8pt"
                 android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />

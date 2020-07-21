@@ -52,12 +52,12 @@ public abstract class AppDatabase extends RoomDatabase {
             Log.i( LOG_TAG_DB, "onOpen() called" );
 
             databaseWriteExecutor.execute(() -> {
-                FeedDao dao = INSTANCE.feedDao();
-                dao.deleteAll();
-                Feed f = new Feed("FHE AI Schwarzes Brett", "https://www.ai.fh-erfurt.de/rss.schwarzesbrett");
-                dao.insert(f);
-                Feed f2 = new Feed("Test Feed", "https://lorem-rss.herokuapp.com/feed");
-                dao.insert(f2);
+//                FeedDao dao = INSTANCE.feedDao();
+//                dao.deleteAll();
+//                Feed f = new Feed("FHE AI Schwarzes Brett", "https://www.ai.fh-erfurt.de/rss.schwarzesbrett");
+//                dao.insert(f);
+//                Feed f2 = new Feed("Test Feed", "https://lorem-rss.herokuapp.com/feed");
+//                dao.insert(f2);
             });
         }
     };

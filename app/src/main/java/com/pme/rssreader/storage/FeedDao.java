@@ -31,19 +31,23 @@ public abstract class FeedDao {
     @Query("SELECT * FROM Item WHERE feedId = :feedId")
     public abstract LiveData<List<Item>> getFeedItems(int feedId);
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract void _insertAll(List<Item> items); // External ItemDao?
 
     void insertItemsForFeed(Feed feed, List<Item> items) {
         // Set feedId for items for FeedWithItems relation
         for (Item item : items) {
             Log.i("insertItemsForFeed", "FEED ID: " + feed.getFeedId());
-            try {
-                // Get host part of the feed url to use as a prefix on item urls
-                URL feedUrl = new URL(feed.getLink());
-                item.setLink(String.format("%s://%s%s", feedUrl.getProtocol(), feedUrl.getHost(), item.getLink()));
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
+
+            // Check if items have full links
+            if (!item.getLink().contains("http")) {
+                try {
+                    // Get host part of the feed url to use as a prefix on item urls
+                    URL feedUrl = new URL(feed.getLink());
+                    item.setLink(String.format("%s://%s%s", feedUrl.getProtocol(), feedUrl.getHost(), item.getLink()));
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
             }
             item.setFeedId(feed.getFeedId());
         }

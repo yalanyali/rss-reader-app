@@ -7,8 +7,8 @@ import org.simpleframework.xml.Root;
 
 
 @NamespaceList({
-        @Namespace(reference = "http://purl.org/rss/1.0/"),
-        @Namespace(prefix = "content", reference = "http://purl.org/rss/1.0/modules/content/")
+    @Namespace(reference = "http://purl.org/rss/1.0/"),
+    @Namespace(prefix = "content", reference = "http://purl.org/rss/1.0/modules/content/")
 })
 @Root(name = "rss", strict = false)
 public class XmlFeed {

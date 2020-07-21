@@ -1,6 +1,8 @@
 package com.pme.rssreader.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -61,6 +63,16 @@ public class NewFeedActivity extends AppCompatActivity {
         feedRepository.insert(f);
         Log.i(LOG_TAG, "FEED SAVED");
         showSnackbar("Feed saved!");
+
+        // Wait for snackbar feedback
+        (new Handler()).postDelayed(this::goBack, 1500);
+
+    }
+
+    private void goBack() {
+//        Intent i = new Intent(this, MainActivity.class);
+//        startActivity(i);
+        super.onBackPressed();
     }
 
     private void showSnackbar(String text) {
@@ -68,6 +80,13 @@ public class NewFeedActivity extends AppCompatActivity {
                 text,
                 Snackbar.LENGTH_LONG);
         snackbar.show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Log.i("ANAN", "onDestroy() called");
     }
 
 }

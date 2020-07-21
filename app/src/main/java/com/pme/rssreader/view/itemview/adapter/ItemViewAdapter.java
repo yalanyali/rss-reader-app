@@ -1,9 +1,8 @@
-package com.pme.rssreader.view.itemview;
+package com.pme.rssreader.view.itemview.adapter;
 
 
-import android.app.Application;
 import android.content.Context;
-import android.util.Log;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +10,19 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
-import androidx.lifecycle.LiveData;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pme.rssreader.R;
-import com.pme.rssreader.storage.FeedRepository;
-import com.pme.rssreader.storage.model.FeedWithItems;
 import com.pme.rssreader.storage.model.Item;
+import com.pme.rssreader.view.itemview.ItemViewViewModel;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 
 public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemViewViewHolder> {
 
@@ -39,6 +42,8 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
     private final LayoutInflater inflater;
     private List<Item> items;
     private ItemViewViewModel viewModel;
+
+    private DateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
 
     public ItemViewAdapter(Context context, ItemViewViewModel viewModel, int feedId) {
         this.inflater = LayoutInflater.from(context);
@@ -62,7 +67,18 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
             } else {
                 holder.content.setText(HtmlCompat.fromHtml(current.getDescription(), HtmlCompat.FROM_HTML_MODE_LEGACY));
             }
-            holder.date.setText("31 h. ago");
+
+            // Parse pubDate
+            try {
+                Date pubDate = dateFormatter.parse(current.getPubDate());
+                Date currentDate = new Date();
+                String relativeTimeSpanString = (String) DateUtils.getRelativeTimeSpanString(pubDate.getTime(), currentDate.getTime(), DateUtils.SECOND_IN_MILLIS);
+                holder.date.setText(relativeTimeSpanString);
+            } catch (ParseException e) {
+                holder.date.setText(current.getPubDate());
+                e.printStackTrace();
+            }
+
 
             holder.itemView.setOnClickListener(view -> viewModel.setItemSelected(current));
 
@@ -72,6 +88,7 @@ public class ItemViewAdapter extends RecyclerView.Adapter<ItemViewAdapter.ItemVi
             holder.date.setText("???");
         }
     }
+
 
     public void setItems(List<Item> items) {
         this.items = items;
