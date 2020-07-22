@@ -4,6 +4,7 @@
 
     <string name="title_activity_item_view">Articles</string>
     <string name="title_activity_settings">Settings</string>
+    <string name="title_activity_details">Article Details</string>
 
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
@@ -18,43 +19,12 @@
     <!-- Theme Preferences -->
     <string name="dark_mode_title">Dark mode</string>
     <string name="accent_color_title">Accent Color</string>
-    <string-array name="accent_entries">
-        <item>Color 1</item>
-        <item>Color 2</item>
-        <item>Color 3</item>
-        <item>Color 4</item>
-    </string-array>
-    <string-array name="accent_values">
-        <item>Val 1</item>
-        <item>Val 2</item>
-        <item>Val 3</item>
-        <item>Val 4</item>
-    </string-array>
+
 
     <!-- Sync Preferences -->
     <string name="sync_title">Sync feeds periodically</string>
     <string name="sync_summary_on">Automatically update sync in background</string>
     <string name="sync_summary_off">Do not automatically update sync in background</string>
-
     <string name="sync_interval_title">Sync Interval</string>
-    <string-array name="sync_entries">
-        <item>15 Minutes</item>
-        <item>30 Minutes</item>
-        <item>45 Minutes</item>
-        <item>60 Minutes</item>
-        <item>45 Minutes</item>
-        <item>1 Hour</item>
-        <item>2 Hours</item>
-        <item>4 Hours</item>
-    </string-array>
-    <string-array name="sync_values">
-        <item>15 Minutes</item>
-        <item>30 Minutes</item>
-        <item>45 Minutes</item>
-        <item>60 Minutes</item>
-        <item>45 Minutes</item>
-        <item>1 Hour</item>
-        <item>2 Hours</item>
-        <item>4 Hours</item>
-    </string-array>
+
 </resources>

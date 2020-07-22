@@ -26,6 +26,8 @@
         <ListPreference
             app:dependency="sync"
             app:key="syncInterval"
+            app:entries="@array/sync_entries"
+            app:entryValues="@array/sync_values"
             app:title="@string/sync_interval_title" />
 
     </PreferenceCategory>
