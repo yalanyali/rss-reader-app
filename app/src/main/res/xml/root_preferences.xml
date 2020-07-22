@@ -1,33 +1,32 @@
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="@string/messages_header">
+    <PreferenceCategory app:title="@string/theme_header">
 
-        <EditTextPreference
-            app:key="signature"
-            app:title="@string/signature_title"
-            app:useSimpleSummaryProvider="true" />
+        <SwitchPreferenceCompat
+            app:key="darkMode"
+            app:title="@string/dark_mode_title" />
 
         <ListPreference
-            app:defaultValue="reply"
-            app:entries="@array/reply_entries"
-            app:entryValues="@array/reply_values"
-            app:key="reply"
-            app:title="@string/reply_title"
-            app:useSimpleSummaryProvider="true" />
+            app:defaultValue="Color 1"
+            app:entries="@array/accent_entries"
+            app:entryValues="@array/accent_values"
+            app:key="colorAccent"
+            app:title="@string/accent_color_title" />
 
     </PreferenceCategory>
     <PreferenceCategory app:title="@string/sync_header">
 
         <SwitchPreferenceCompat
             app:key="sync"
-            app:title="@string/sync_title" />
+            app:title="@string/sync_title"
+            app:summaryOff="@string/sync_summary_off"
+            app:summaryOn="@string/sync_summary_on" />
 
-        <SwitchPreferenceCompat
+        <ListPreference
             app:dependency="sync"
-            app:key="attachment"
-            app:summaryOff="@string/attachment_summary_off"
-            app:summaryOn="@string/attachment_summary_on"
-            app:title="@string/attachment_title" />
+            app:key="syncInterval"
+            app:title="@string/sync_interval_title" />
 
     </PreferenceCategory>
 
