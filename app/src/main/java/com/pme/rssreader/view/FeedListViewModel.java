@@ -22,12 +22,12 @@ public class FeedListViewModel extends AndroidViewModel {
 
     public FeedListViewModel(Application application) {
         super(application);
-        this.feedRepository = FeedRepository.getRepository(application);
-        this.allFeeds = this.feedRepository.getAllFeeds();
+        this.feedRepository = FeedRepository.getRepository(application.getApplicationContext());
+        this.allFeeds = this.feedRepository.getAllFeedsObservable();
         this.itemSelectedEvent = new SingleLiveEvent<>();
     }
 
-    public LiveData<List<FeedWithItems>> getAllFeeds() {
+    public LiveData<List<FeedWithItems>> getAllFeedsObservable() {
         return allFeeds;
     }
 
@@ -35,7 +35,7 @@ public class FeedListViewModel extends AndroidViewModel {
 //        this.feedRepository.insert(feed);
 //    }
 
-    public SingleLiveEvent<Integer> getItemSelectedEvent() {
+    public SingleLiveEvent<Integer> getItemSelectedEventObservable() {
         return itemSelectedEvent;
     }
 

@@ -19,7 +19,7 @@ public class ItemViewModel extends AndroidViewModel {
     public ItemViewModel(Application application, int feedId) {
         super(application);
         FeedRepository feedRepository = FeedRepository.getRepository(application);
-        allItems = feedRepository.getFeedItems(feedId);
+        allItems = feedRepository.getFeedItemsObservable(feedId);
         itemSelectedEvent = new SingleLiveEvent<>();
     }
 

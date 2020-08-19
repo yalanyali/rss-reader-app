@@ -15,7 +15,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        card_view:cardCornerRadius="4dp">
+        card_view:cardCornerRadius="4dp"
+        android:elevation="60dp"
+        android:foreground="?android:attr/selectableItemBackground" >
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

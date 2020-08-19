@@ -70,8 +70,6 @@ public class NewFeedActivity extends AppCompatActivity {
     }
 
     private void goBack() {
-//        Intent i = new Intent(this, MainActivity.class);
-//        startActivity(i);
         super.onBackPressed();
     }
 

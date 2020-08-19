@@ -1,6 +1,7 @@
 package com.pme.rssreader.storage;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -26,32 +27,33 @@ public class FeedRepository {
     public static final String LOG_TAG_DATABASE = "Database";
 
     private FeedDao feedDao;
-    private LiveData<List<FeedWithItems>> allFeeds;
+    private LiveData<List<FeedWithItems>> allFeedsObservable;
+//    private List<FeedWithItems> allFeeds;
 
     private static FeedRepository INSTANCE;
 
-    public static FeedRepository getRepository(Application application) {
+    public static FeedRepository getRepository(Context context) {
         if (INSTANCE == null) {
             synchronized (FeedRepository.class) {
-                INSTANCE = new FeedRepository(application);
+                INSTANCE = new FeedRepository(context);
                 Log.w("REPO INSTANCE:", "");
             }
         }
         return INSTANCE;
     }
 
-    private FeedRepository(Application application) {
-        AppDatabase db = AppDatabase.getDatabase(application);
+    private FeedRepository(Context context) {
+        AppDatabase db = AppDatabase.getDatabase(context);
         this.feedDao = db.feedDao();
-        this.allFeeds = this.feedDao.getFeeds();
+        this.allFeedsObservable = this.feedDao.getFeedsObservable();
     }
 
-    public LiveData<List<FeedWithItems>> getAllFeeds() {
-        return allFeeds;
+    public LiveData<List<FeedWithItems>> getAllFeedsObservable() {
+        return allFeedsObservable;
     }
 
-    public LiveData<List<Item>> getFeedItems(int feedId) {
-        return feedDao.getFeedItems(feedId);
+    public LiveData<List<Item>> getFeedItemsObservable(int feedId) {
+        return feedDao.getFeedItemsObservable(feedId);
     }
 
     public void insert(Feed feed) {
@@ -62,10 +64,53 @@ public class FeedRepository {
         });
     }
 
-    public void refreshFeeds() {
+    // NOT TO BE USED IN MAIN THREAD
+    public void refreshFeedsInBackground() {
+        Log.e("refreshFeedsInBackground", "CALLED");
+        if (this.feedDao.getFeeds().size() == 0) {
+            Log.e("refreshFeedsInBackground", "WAS NULL");
+            return;
+        }
+        Log.e("refreshFeedsInBackground", "WAS NOT NULL");
         NetworkApi api = NetworkController.getApi();
-        if (allFeeds.getValue() == null) { return; }
-        for (FeedWithItems feed : allFeeds.getValue()) {
+        for (FeedWithItems feed : this.feedDao.getFeeds()) {
+            Log.w("NETWORK CALL:", feed.getFeed().getLink());
+            api.getFeed(feed.getFeed().getLink()).enqueue(new Callback<XmlFeed>() {
+                @Override
+                public void onResponse(Call<XmlFeed> call, Response<XmlFeed> response) {
+                    if (response.isSuccessful()) {
+                        Log.w(LOG_TAG_NETWORK, "Network call: success.");
+                        Log.w("FEED", String.valueOf(feed.getFeed().getFeedId()));
+
+                        List<Item> newItems = new ArrayList<>();
+                        for (XmlItem xmlItem : response.body().channel.item) {
+                            // TODO: NEW ITEM CHECK FOR NOTIFICATION
+                            newItems.add(xmlItem.toItem());
+                        }
+
+                        insertItemsForFeed(feed.getFeed(), newItems);
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<XmlFeed> call, Throwable t) {
+                    Log.e(LOG_TAG_NETWORK, "Network call: error.");
+                    Log.e(LOG_TAG_NETWORK, t.getMessage());
+                }
+            });
+        }
+
+    }
+
+    public void refreshFeeds() {
+        Log.e("refreshFeeds", "CALLED");
+        NetworkApi api = NetworkController.getApi();
+        if (this.allFeedsObservable.getValue() == null) {
+            Log.e("refreshFeeds", "WAS NULL");
+            return;
+        }
+        Log.e("refreshFeeds", "WAS NOT NULL");
+        for (FeedWithItems feed : this.allFeedsObservable.getValue()) {
             Log.w("NETWORK CALL:", feed.getFeed().getLink());
             api.getFeed(feed.getFeed().getLink()).enqueue(new Callback<XmlFeed>() {
                 @Override

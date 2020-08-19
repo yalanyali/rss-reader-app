@@ -1,14 +1,17 @@
 package com.pme.rssreader.view;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
 import com.pme.rssreader.R;
+import com.pme.rssreader.storage.FeedRepository;
 import com.pme.rssreader.view.settings.SettingsActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -52,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         toNewFeed.setOnClickListener(this.buttonClickListener);
         Button toSettings = findViewById(R.id.btn_to_settings);
         toSettings.setOnClickListener(this.buttonClickListener);
+
     }
 
     private void goToFeedListActivity() {

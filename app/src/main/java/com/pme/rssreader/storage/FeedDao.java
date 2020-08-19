@@ -22,18 +22,20 @@ public abstract class FeedDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     public abstract void insert(Feed feed);
 
-//    public void insertOrUpdate(Feed feed) {
-//        List<Feed> feeds = g
-//    }
-
     @Query("DELETE FROM Feed")
     public abstract void deleteAll();
 
     @Query("SELECT * FROM Feed")
-    public abstract LiveData<List<FeedWithItems>> getFeeds();
+    public abstract LiveData<List<FeedWithItems>> getFeedsObservable();
+
+    @Query("SELECT * FROM Feed")
+    public abstract List<FeedWithItems> getFeeds();
 
     @Query("SELECT * FROM Item WHERE feedId = :feedId")
-    public abstract LiveData<List<Item>> getFeedItems(int feedId);
+    public abstract LiveData<List<Item>> getFeedItemsObservable(int feedId);
+
+    @Query("SELECT * FROM Item WHERE feedId = :feedId")
+    public abstract List<Item> getFeedItems(int feedId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     abstract void _insertAll(List<Item> items); // External ItemDao?
