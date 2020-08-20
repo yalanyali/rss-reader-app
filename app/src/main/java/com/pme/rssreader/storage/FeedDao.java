@@ -31,10 +31,10 @@ public abstract class FeedDao {
     @Query("SELECT * FROM Feed")
     public abstract List<FeedWithItems> getFeeds();
 
-    @Query("SELECT * FROM Item WHERE feedId = :feedId")
+    @Query("SELECT * FROM Item WHERE feedId = :feedId ORDER BY pubDate DESC")
     public abstract LiveData<List<Item>> getFeedItemsObservable(int feedId);
 
-    @Query("SELECT * FROM Item WHERE feedId = :feedId")
+    @Query("SELECT * FROM Item WHERE feedId = :feedId ORDER BY pubDate DESC")
     public abstract List<Item> getFeedItems(int feedId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

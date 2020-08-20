@@ -7,6 +7,12 @@ import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.NamespaceList;
 import org.simpleframework.xml.Root;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 @Root(name = "item", strict = false)
 public class XmlItem {
     @Element
@@ -41,7 +47,17 @@ public class XmlItem {
         i.setTitle(title);
         i.setDescription(description);
         i.setLink(link);
-        i.setPubDate(pubDate);
+
+        // Parse date
+        DateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
+        // Default date on parse error
+        Date itemDate = new Date();
+        try {
+            itemDate = dateFormatter.parse(pubDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        i.setPubDate(itemDate);
         if (guid != null) {
             i.setGuid(guid);
         }

@@ -6,6 +6,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import java.io.Serializable;
+import java.util.Date;
 
 @Entity(indices = {@Index(value = {"guid"}, unique = true)})
 public class Item implements Serializable {
@@ -20,7 +21,7 @@ public class Item implements Serializable {
     @NonNull
     private String link;
 
-    private String pubDate;
+    private Date pubDate;
 
     private String content;
 
@@ -62,11 +63,11 @@ public class Item implements Serializable {
         this.link = link;
     }
 
-    public String getPubDate() {
+    public Date getPubDate() {
         return pubDate;
     }
 
-    public void setPubDate(String pubDate) {
+    public void setPubDate(Date pubDate) {
         this.pubDate = pubDate;
     }
 

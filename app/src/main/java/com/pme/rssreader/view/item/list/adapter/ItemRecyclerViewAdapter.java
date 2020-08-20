@@ -43,8 +43,6 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     private List<Item> items;
     private ItemViewModel viewModel;
 
-    private DateFormat dateFormatter = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US);
-
     public ItemRecyclerViewAdapter(Context context, ItemViewModel viewModel, int feedId) {
         this.inflater = LayoutInflater.from(context);
         this.viewModel = viewModel;
@@ -68,17 +66,10 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
                 holder.content.setText(HtmlCompat.fromHtml(current.getDescription(), HtmlCompat.FROM_HTML_MODE_LEGACY));
             }
 
-            // Parse pubDate
-            try {
-                Date pubDate = dateFormatter.parse(current.getPubDate());
-                Date currentDate = new Date();
-                String relativeTimeSpanString = (String) DateUtils.getRelativeTimeSpanString(pubDate.getTime(), currentDate.getTime(), DateUtils.SECOND_IN_MILLIS);
-                holder.date.setText(relativeTimeSpanString);
-            } catch (ParseException e) {
-                holder.date.setText(current.getPubDate());
-                e.printStackTrace();
-            }
-
+            Date pubDate = current.getPubDate();
+            Date currentDate = new Date();
+            String relativeTimeSpanString = (String) DateUtils.getRelativeTimeSpanString(pubDate.getTime(), currentDate.getTime(), DateUtils.SECOND_IN_MILLIS);
+            holder.date.setText(relativeTimeSpanString);
 
             holder.itemView.setOnClickListener(view -> viewModel.setItemSelected(current));
 

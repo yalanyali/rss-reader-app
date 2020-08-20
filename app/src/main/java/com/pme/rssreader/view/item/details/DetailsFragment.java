@@ -72,7 +72,7 @@ public class DetailsFragment extends Fragment {
             }
             // To enable scrolling and clickable links
             content.setMovementMethod(LinkMovementMethod.getInstance());
-            date.setText(currentItem.getPubDate());
+            date.setText(currentItem.getPubDate().toString());
 
             button.setOnClickListener(v -> {
                 Intent i = new Intent(Intent.ACTION_VIEW);
