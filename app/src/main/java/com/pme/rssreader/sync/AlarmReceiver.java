@@ -14,6 +14,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.pme.rssreader.R;
 import com.pme.rssreader.core.App;
+import com.pme.rssreader.core.Constants;
 import com.pme.rssreader.storage.FeedRepository;
 
 import java.util.Calendar;
@@ -33,7 +34,7 @@ public class AlarmReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         // FIXME: Hardcoded
-        if (Objects.equals(intent.getAction(), "RSS_UPDATE_ACTION")) {
+        if (Objects.equals(intent.getAction(), Constants.ALARM_RECEIVER_ACTION)) {
             Log.e("ALARMA", String.format("Geldi %d", Calendar.getInstance().getTimeInMillis()));
             new UpdateTask().execute(context);
 //            FeedRepository feedRepository = FeedRepository.getRepository(context);
@@ -41,6 +42,8 @@ public class AlarmReceiver extends BroadcastReceiver {
             fireNotification(context);
         }
     }
+
+//    private void checkConditions
 
     private void fireNotification(Context context) {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);

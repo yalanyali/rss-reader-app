@@ -4,7 +4,7 @@
     <PreferenceCategory app:title="@string/theme_header">
 
         <SwitchPreferenceCompat
-            app:key="darkMode"
+            app:key="DARK_MODE_ENABLED"
             app:title="@string/dark_mode_title" />
 
         <ListPreference
@@ -18,16 +18,17 @@
     <PreferenceCategory app:title="@string/sync_header">
 
         <SwitchPreferenceCompat
-            app:key="sync"
+            app:key="SYNC_ENABLED"
             app:title="@string/sync_title"
             app:summaryOff="@string/sync_summary_off"
             app:summaryOn="@string/sync_summary_on" />
 
         <ListPreference
-            app:dependency="sync"
-            app:key="syncInterval"
+            app:dependency="SYNC_ENABLED"
+            app:key="SYNC_INTERVAL"
             app:entries="@array/sync_entries"
             app:entryValues="@array/sync_values"
+            app:defaultValue="30"
             app:title="@string/sync_interval_title" />
 
     </PreferenceCategory>

@@ -4,12 +4,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import com.pme.rssreader.R;
+import com.pme.rssreader.core.Constants;
+import com.pme.rssreader.sync.AlarmUtils;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -23,17 +24,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         Preference preference = findPreference(key);
         Log.e("SETTINGS", key);
         switch (key) {
-            case "darkMode":
-//                Log.e("SETTINGS", String.valueOf(sharedPreferences.getBoolean(key, true)));
+            case Constants.SETTING_DARK_MODE_ENABLED:
                 int nightMode = sharedPreferences.getBoolean(key, false) ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
                 AppCompatDelegate.setDefaultNightMode(nightMode);
                 break;
             case "colorAccent":
-            case "syncInterval":
-                Log.e("SETTINGS", sharedPreferences.getString(key, ""));
                 break;
-            case "sync":
-                Log.e("SETTINGS", String.valueOf(sharedPreferences.getBoolean(key, true)));
+            case Constants.SETTING_SYNC_INTERVAL:
+            case Constants.SETTING_SYNC_ENABLED:
+                AlarmUtils.updateAlarmUsingSharedPrefs(requireContext(), sharedPreferences);
                 break;
         }
     }

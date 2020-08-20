@@ -102,6 +102,7 @@ public class FeedRepository {
 
     }
 
+    // Can be called on main thread, since it makes use of LiveData
     public void refreshFeeds() {
         Log.e("refreshFeeds", "CALLED");
         NetworkApi api = NetworkController.getApi();

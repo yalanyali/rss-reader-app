@@ -1,12 +1,9 @@
 package com.pme.rssreader.view.settings;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceFragmentCompat;
 
 import com.pme.rssreader.R;
 
@@ -25,4 +22,5 @@ public class SettingsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
     }
+
 }
