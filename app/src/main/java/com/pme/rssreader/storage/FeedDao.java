@@ -7,6 +7,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Transaction;
 
 import com.pme.rssreader.storage.model.Feed;
 import com.pme.rssreader.storage.model.FeedWithItems;
@@ -25,9 +26,11 @@ public abstract class FeedDao {
     @Query("DELETE FROM Feed")
     public abstract void deleteAll();
 
+//    @Transaction
     @Query("SELECT * FROM Feed")
     public abstract LiveData<List<FeedWithItems>> getFeedsObservable();
 
+//    @Transaction
     @Query("SELECT * FROM Feed")
     public abstract List<FeedWithItems> getFeeds();
 
@@ -37,8 +40,8 @@ public abstract class FeedDao {
     @Query("SELECT * FROM Item WHERE feedId = :feedId ORDER BY pubDate DESC")
     public abstract List<Item> getFeedItems(int feedId);
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract void _insertAll(List<Item> items); // External ItemDao?
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    abstract void _insertAll(List<Item> items);
 
     void insertItemsForFeed(Feed feed, List<Item> items) {
         // Set feedId for items for FeedWithItems relation

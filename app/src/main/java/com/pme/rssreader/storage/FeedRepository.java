@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.pme.rssreader.network.NetworkApi;
@@ -13,9 +14,12 @@ import com.pme.rssreader.network.model.XmlItem;
 import com.pme.rssreader.storage.model.Feed;
 import com.pme.rssreader.storage.model.FeedWithItems;
 import com.pme.rssreader.storage.model.Item;
+import com.pme.rssreader.sync.NotificationUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -28,9 +32,10 @@ public class FeedRepository {
 
     private FeedDao feedDao;
     private LiveData<List<FeedWithItems>> allFeedsObservable;
-//    private List<FeedWithItems> allFeeds;
 
     private static FeedRepository INSTANCE;
+
+    private Context context;
 
     public static FeedRepository getRepository(Context context) {
         if (INSTANCE == null) {
@@ -44,6 +49,7 @@ public class FeedRepository {
 
     private FeedRepository(Context context) {
         AppDatabase db = AppDatabase.getDatabase(context);
+        this.context = context;
         this.feedDao = db.feedDao();
         this.allFeedsObservable = this.feedDao.getFeedsObservable();
     }
@@ -73,29 +79,49 @@ public class FeedRepository {
         }
         Log.e("refreshFeedsInBackground", "WAS NOT NULL");
         NetworkApi api = NetworkController.getApi();
-        for (FeedWithItems feed : this.feedDao.getFeeds()) {
-            Log.w("NETWORK CALL:", feed.getFeed().getLink());
-            api.getFeed(feed.getFeed().getLink()).enqueue(new Callback<XmlFeed>() {
+
+        for (FeedWithItems currentFeed : this.feedDao.getFeeds()) {
+            Log.w("NETWORK CALL:", currentFeed.getFeed().getLink());
+            api.getFeed(currentFeed.getFeed().getLink()).enqueue(new Callback<XmlFeed>() {
                 @Override
-                public void onResponse(Call<XmlFeed> call, Response<XmlFeed> response) {
+                public void onResponse(@NonNull Call<XmlFeed> call, @NonNull Response<XmlFeed> response) {
                     if (response.isSuccessful()) {
                         Log.w(LOG_TAG_NETWORK, "Network call: success.");
-                        Log.w("FEED", String.valueOf(feed.getFeed().getFeedId()));
+                        Log.w("FEED", String.valueOf(currentFeed.getFeed().getFeedId()));
 
                         List<Item> newItems = new ArrayList<>();
-                        for (XmlItem xmlItem : response.body().channel.item) {
-                            // TODO: NEW ITEM CHECK FOR NOTIFICATION
-                            newItems.add(xmlItem.toItem());
+
+                        if (response.body() != null) {
+                            for (XmlItem xmlItem : response.body().channel.item) {
+                                // TODO: NEW ITEM CHECK FOR NOTIFICATION
+                                List<Item> currentFeedItems = currentFeed.getItems();
+                                Item currentItem = xmlItem.toItem();
+
+                                Optional<Item> foundItem = currentFeedItems
+                                        .stream().parallel()
+                                        .filter(item -> item.getGuid().equals(currentItem.getGuid()))
+                                        .findAny();
+
+                                if (!foundItem.isPresent()) {
+                                    newItems.add(currentItem);
+                                }
+                            }
                         }
 
-                        insertItemsForFeed(feed.getFeed(), newItems);
+                        // If any new items on current feed
+                        if (newItems.size() > 0) {
+                            // Insert items to DB
+                            insertItemsForFeed(currentFeed.getFeed(), newItems);
+                            // Notify the user
+                            NotificationUtils.createNotificationForNewItems(context, newItems);
+                        }
                     }
                 }
 
                 @Override
-                public void onFailure(Call<XmlFeed> call, Throwable t) {
+                public void onFailure(@NonNull Call<XmlFeed> call, @NonNull Throwable t) {
                     Log.e(LOG_TAG_NETWORK, "Network call: error.");
-                    Log.e(LOG_TAG_NETWORK, t.getMessage());
+                    Log.e(LOG_TAG_NETWORK, Objects.requireNonNull(t.getMessage()));
                 }
             });
         }

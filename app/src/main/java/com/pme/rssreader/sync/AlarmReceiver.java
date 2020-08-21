@@ -29,7 +29,6 @@ import java.util.Objects;
  * See: https://issuetracker.google.com/issues/150080941
  */
 public class AlarmReceiver extends BroadcastReceiver {
-    private static final String CHANNEL_ID = "TEST_CHANNEL_ID";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -39,31 +38,9 @@ public class AlarmReceiver extends BroadcastReceiver {
             new UpdateTask().execute(context);
 //            FeedRepository feedRepository = FeedRepository.getRepository(context);
 //            feedRepository.refreshFeeds();
-            fireNotification(context);
         }
     }
 
 //    private void checkConditions
 
-    private void fireNotification(Context context) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
-
-        builder.setContentTitle("Demo App Notification")
-                .setContentText("New Notification From Demo App..")
-                .setTicker("New Message Alert!")
-                .setSmallIcon(R.mipmap.ic_launcher);
-
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "NotificationDemo",
-                    NotificationManager.IMPORTANCE_DEFAULT
-            );
-            notificationManager.createNotificationChannel(channel);
-        }
-
-        notificationManager.notify(0, builder.build());
-    }
 }

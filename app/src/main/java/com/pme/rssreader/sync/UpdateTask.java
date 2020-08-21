@@ -5,6 +5,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.pme.rssreader.storage.FeedRepository;
+import com.pme.rssreader.storage.model.Item;
+
+import java.util.List;
 
 public class UpdateTask extends AsyncTask<Context, Void, Void> {
     @Override
@@ -12,6 +15,10 @@ public class UpdateTask extends AsyncTask<Context, Void, Void> {
         Log.e("ALARMA UpdateTask", "ISTEK GELDI");
         FeedRepository feedRepository = FeedRepository.getRepository(contexts[0]);
         feedRepository.refreshFeedsInBackground();
+//        List<Item> newItems = feedRepository.refreshFeedsInBackground();
+//        if (newItems != null) {
+//            Log.e("doInBackground", String.valueOf(newItems.size()));
+//        }
         return null;
     }
 }

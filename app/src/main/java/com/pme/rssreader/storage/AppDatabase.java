@@ -16,7 +16,7 @@ import com.pme.rssreader.storage.model.Item;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Feed.class, Item.class}, version = 1)
+@Database(entities = {Feed.class, Item.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     private static final String LOG_TAG_DB = "RoomDB";
@@ -55,7 +55,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
             databaseWriteExecutor.execute(() -> {
                 FeedDao dao = INSTANCE.feedDao();
-                dao.deleteAll();
+//                dao.deleteAll();
                 Feed f = new Feed("FHE AI Schwarzes Brett", "https://www.ai.fh-erfurt.de/rss.schwarzesbrett");
                 dao.insert(f);
 //                Feed f2 = new Feed("Tagesschau", "https://www.tagesschau.de/xml/rss2_https");

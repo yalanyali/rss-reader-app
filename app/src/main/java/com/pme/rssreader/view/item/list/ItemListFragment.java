@@ -80,6 +80,7 @@ public class ItemListFragment extends Fragment {
     }
 
     private final ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
+        @SuppressWarnings("unchecked")
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {

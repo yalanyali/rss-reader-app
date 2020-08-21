@@ -1,15 +1,23 @@
 package com.pme.rssreader.sync;
 
 import android.app.AlarmManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
+
+import com.pme.rssreader.R;
 import com.pme.rssreader.core.Constants;
+import com.pme.rssreader.storage.model.Item;
 
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Static alarm utilities.
@@ -29,7 +37,7 @@ public class AlarmUtils {
 
         // Delay the first alarm
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND, intervalSec);
+        calendar.add(Calendar.SECOND, 5);
 
         if (alarmManager != null) {
             Log.e("setOrUpdateAlarm", String.format("ALARM SET: %d", intervalSec / 60));
