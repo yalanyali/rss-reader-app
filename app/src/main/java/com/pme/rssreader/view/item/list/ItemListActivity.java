@@ -18,6 +18,8 @@ import com.pme.rssreader.view.item.details.DetailsFragment;
 
 public class ItemListActivity extends AppCompatActivity {
 
+    public static String INTENT_EXTRA = "SELECTED_FEED_ID";
+
     private Fragment itemListFragment;
     private String ITEM_LIST_FRAGMENT_TAG = "ITEM_LIST";
 
@@ -29,7 +31,7 @@ public class ItemListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.item_fragment_layout);
 
-        Integer currentFeedId = getIntent().getIntExtra("SELECTED_FEED_ID", 1);
+        int currentFeedId = getIntent().getIntExtra(INTENT_EXTRA, 1);
         Log.w("ItemViewActivity feed id:", String.valueOf(currentFeedId));
 
         FragmentManager fm = getSupportFragmentManager();
@@ -42,7 +44,7 @@ public class ItemListActivity extends AppCompatActivity {
             // Create fragment
             itemListFragment = ItemListFragment.newInstance();
             Bundle bundle = new Bundle();
-            bundle.putInt("SELECTED_ITEM_ID", currentFeedId);
+            bundle.putInt(ItemListFragment.INTENT_EXTRA, currentFeedId);
             itemListFragment.setArguments(bundle);
 
             FragmentTransaction ft = fm.beginTransaction();

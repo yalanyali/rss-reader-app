@@ -58,7 +58,9 @@ public abstract class FeedDao {
                     e.printStackTrace();
                 }
             }
-            item.setFeedId(feed.getFeedId());
+            if (item.getFeedId() == 0) {
+                item.setFeedId(feed.getFeedId());
+            }
         }
         _insertAll(items);
     }

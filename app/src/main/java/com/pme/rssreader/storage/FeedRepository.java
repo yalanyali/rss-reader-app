@@ -103,6 +103,8 @@ public class FeedRepository {
                                         .findAny();
 
                                 if (!foundItem.isPresent()) {
+                                    currentItem.setFeedName(currentFeed.getFeed().getName());
+                                    currentItem.setFeedId(currentFeed.getFeed().getFeedId());
                                     newItems.add(currentItem);
                                 }
                             }
@@ -129,7 +131,7 @@ public class FeedRepository {
     }
 
     // Can be called on main thread, since it makes use of LiveData
-    public void refreshFeeds() {
+    public void refreshAllFeeds() {
         Log.e("refreshFeeds", "CALLED");
         NetworkApi api = NetworkController.getApi();
         if (this.allFeedsObservable.getValue() == null) {
@@ -165,6 +167,10 @@ public class FeedRepository {
                 }
             });
         }
+
+    }
+
+    public void refreshFeed(int feedId) {
 
     }
 

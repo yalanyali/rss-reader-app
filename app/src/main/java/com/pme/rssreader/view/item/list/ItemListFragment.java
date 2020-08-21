@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,8 @@ import com.pme.rssreader.view.item.list.adapter.ItemRecyclerViewAdapter;
  * A fragment representing a list of Items.
  */
 public class ItemListFragment extends Fragment {
+
+    public static String INTENT_EXTRA = "SELECTED_FEED_ID";
 
     private ItemViewModel itemViewModel;
 
@@ -45,7 +48,8 @@ public class ItemListFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments() != null) {
-            currentId = getArguments().getInt("SELECTED_ITEM_ID");
+            currentId = getArguments().getInt(INTENT_EXTRA);
+            Log.e("ItemListFragment", String.valueOf(currentId));
         }
     }
 

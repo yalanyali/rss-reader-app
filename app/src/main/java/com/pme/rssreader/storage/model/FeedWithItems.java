@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class FeedWithItems implements Serializable {
+
     @Embedded
     private Feed feed;
 

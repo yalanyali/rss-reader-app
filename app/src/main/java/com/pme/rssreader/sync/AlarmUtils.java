@@ -37,7 +37,7 @@ public class AlarmUtils {
 
         // Delay the first alarm
         Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.SECOND, 5);
+        calendar.add(Calendar.SECOND, 5); // FIXME: intervalSec
 
         if (alarmManager != null) {
             Log.e("setOrUpdateAlarm", String.format("ALARM SET: %d", intervalSec / 60));

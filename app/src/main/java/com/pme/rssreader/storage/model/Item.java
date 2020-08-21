@@ -2,6 +2,7 @@ package com.pme.rssreader.storage.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
@@ -10,10 +11,11 @@ import java.util.Date;
 
 @Entity(indices = {@Index(value = {"guid"}, unique = true)})
 public class Item implements Serializable {
-    @PrimaryKey(autoGenerate = true)
-    private long id;
 
-    private long feedId;
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+
+    private int feedId;
 
     @NonNull
     private String title;
@@ -29,19 +31,25 @@ public class Item implements Serializable {
 
     private String guid;
 
-    public long getId() {
+    // NOT IN DATABASE, NOT POPULATED
+    // This is only for a quick lookup for notifications.
+    // It only gets populated on new items.
+    @Ignore
+    private String feedName;
+
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public long getFeedId() {
+    public int getFeedId() {
         return feedId;
     }
 
-    public void setFeedId(long feedId) {
+    public void setFeedId(int feedId) {
         this.feedId = feedId;
     }
 
@@ -98,5 +106,13 @@ public class Item implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getFeedName() {
+        return feedName;
+    }
+
+    public void setFeedName(String feedName) {
+        this.feedName = feedName;
     }
 }

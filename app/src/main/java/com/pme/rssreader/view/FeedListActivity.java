@@ -106,9 +106,9 @@ public class FeedListActivity extends AppCompatActivity {
         this.feedListViewModel.getAllFeedsObservable().observe(this, adapter::setFeeds);
         this.feedListViewModel.getItemSelectedEventObservable().observe(this, feedId -> {
             Log.w("SELECTED_FEED_ID", String.valueOf(feedId));
-//            FeedRepository.getRepository(getApplication()).refreshFeeds();
+            FeedRepository.getRepository(getApplication()).refreshFeed(feedId);
             Intent i = new Intent(this, ItemListActivity.class);
-            i.putExtra("SELECTED_FEED_ID", feedId);
+            i.putExtra(ItemListActivity.INTENT_EXTRA, feedId);
             startActivity(i);
         });
 

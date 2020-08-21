@@ -13,7 +13,7 @@ import java.io.Serializable;
 public class Feed implements Serializable {
 
     @PrimaryKey(autoGenerate = true)
-    private long feedId;
+    private int feedId;
 
     @NonNull
     private String name;
@@ -29,11 +29,11 @@ public class Feed implements Serializable {
         this.link = link;
     }
 
-    public long getFeedId() {
+    public int getFeedId() {
         return feedId;
     }
 
-    public void setFeedId(long feedId) {
+    public void setFeedId(int feedId) {
         this.feedId = feedId;
     }
 
