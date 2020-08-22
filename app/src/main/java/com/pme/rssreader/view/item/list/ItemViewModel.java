@@ -16,9 +16,11 @@ public class ItemViewModel extends AndroidViewModel {
     private LiveData<List<Item>> allItems;
     private SingleLiveEvent<Item> itemSelectedEvent;
 
+    private FeedRepository feedRepository;
+
     public ItemViewModel(Application application, int feedId) {
         super(application);
-        FeedRepository feedRepository = FeedRepository.getRepository(application);
+        feedRepository = FeedRepository.getRepository(application);
         allItems = feedRepository.getFeedItemsObservable(feedId);
         itemSelectedEvent = new SingleLiveEvent<>();
     }
@@ -41,6 +43,10 @@ public class ItemViewModel extends AndroidViewModel {
 
     public void setItemSelected(Item selectedItem) {
         this.getItemSelectedEvent().setValue(selectedItem);
+    }
+
+    public void refreshFeed(int feedId) {
+        this.feedRepository.refreshFeed(feedId);
     }
 
 }

@@ -63,10 +63,17 @@ public class FeedRepository {
     }
 
     public void insert(Feed feed) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
+        AppDatabase.databaseThreadExecutor.execute(() -> {
             feed.setCreated(System.currentTimeMillis());
             Log.i("RoomDB", "Saving: " + feed.toString());
             feedDao.insert(feed);
+        });
+    }
+
+    public void deleteFeed(Feed feed) {
+        AppDatabase.databaseThreadExecutor.execute(() -> {
+            Log.i("RoomDB", "Deleting: " + feed.toString());
+            feedDao.delete(feed);
         });
     }
 
@@ -93,7 +100,6 @@ public class FeedRepository {
 
                         if (response.body() != null) {
                             for (XmlItem xmlItem : response.body().channel.item) {
-                                // TODO: NEW ITEM CHECK FOR NOTIFICATION
                                 List<Item> currentFeedItems = currentFeed.getItems();
                                 Item currentItem = xmlItem.toItem();
 
@@ -146,17 +152,11 @@ public class FeedRepository {
                 public void onResponse(Call<XmlFeed> call, Response<XmlFeed> response) {
                     if (response.isSuccessful()) {
                         Log.w(LOG_TAG_NETWORK, "Network call: success.");
-//                            Log.d("FEED:", response.body().channel.item.get(0).toString());
-                        Log.w("FEED", String.valueOf(feed.getFeed().getFeedId()));
-
-                        //
                         List<Item> newItems = new ArrayList<>();
                         for (XmlItem xmlItem : response.body().channel.item) {
                             newItems.add(xmlItem.toItem());
                         }
-
                         insertItemsForFeed(feed.getFeed(), newItems);
-                        //
                     }
                 }
 
@@ -171,7 +171,30 @@ public class FeedRepository {
     }
 
     public void refreshFeed(int feedId) {
-
+        AppDatabase.databaseThreadExecutor.execute(() -> {
+            Feed feed = feedDao.getFeedById(feedId);
+            if (feed != null) {
+                NetworkApi api = NetworkController.getApi();
+                api.getFeed(feed.getLink()).enqueue(new Callback<XmlFeed>() {
+                    @Override
+                    public void onResponse(Call<XmlFeed> call, Response<XmlFeed> response) {
+                        if (response.isSuccessful()) {
+                            Log.w(LOG_TAG_NETWORK, "Network call: success.");
+                            List<Item> newItems = new ArrayList<>();
+                            for (XmlItem xmlItem : response.body().channel.item) {
+                                newItems.add(xmlItem.toItem());
+                            }
+                            insertItemsForFeed(feed, newItems);
+                        }
+                    }
+                    @Override
+                    public void onFailure(Call<XmlFeed> call, Throwable t) {
+                        Log.e(LOG_TAG_NETWORK, "Network call: error.");
+                        Log.e(LOG_TAG_NETWORK, t.getMessage());
+                    }
+                });
+            }
+        });
     }
 
 //    public void refreshFeed(int feedId) {
@@ -203,7 +226,7 @@ public class FeedRepository {
 //    }
 
     public void insertItemsForFeed(Feed feed, List<Item> items) {
-        AppDatabase.databaseWriteExecutor.execute(() -> {
+        AppDatabase.databaseThreadExecutor.execute(() -> {
             feedDao.insertItemsForFeed(feed, items);
         });
     }

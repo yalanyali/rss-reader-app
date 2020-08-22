@@ -1,15 +1,18 @@
 package com.pme.rssreader.view.feed.list.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pme.rssreader.R;
+import com.pme.rssreader.storage.model.Feed;
 import com.pme.rssreader.storage.model.FeedWithItems;
 import com.pme.rssreader.view.feed.list.FeedListViewModel;
 
@@ -34,9 +37,12 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedRecyclerVi
     private final FeedListViewModel viewModel;
     private List<FeedWithItems> feeds;
 
-    public FeedRecyclerViewAdapter(Context context, FeedListViewModel viewModel) {
+    private ItemDeleteCallback itemDeleteCallback;
+
+    public FeedRecyclerViewAdapter(Context context, FeedListViewModel viewModel, ItemDeleteCallback itemDeleteCallback) {
         this.inflater = LayoutInflater.from(context);
         this.viewModel = viewModel;
+        this.itemDeleteCallback = itemDeleteCallback;
     }
 
     @NonNull
@@ -56,10 +62,25 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedRecyclerVi
             holder.itemView.setOnClickListener(view ->
                 viewModel.setItemSelected(current.getFeed().getFeedId())
             );
+
+            holder.itemView.setOnLongClickListener(view -> {
+                Log.e("setOnLongClickListener", "falan");
+                itemDeleteCallback.itemDeleteRequest(current.getFeed());
+                return true;
+            });
+
         } else {
             holder.feedListItemNameTextView.setText("NO_NAME");
             holder.feedListItemLinkTextView.setText("NO_LINK");
         }
+    }
+
+    /**
+     * Callback interface.
+     * Method is implemented in fragment.
+     */
+    public interface ItemDeleteCallback {
+        void itemDeleteRequest(Feed feed);
     }
 
     public void setFeeds(List<FeedWithItems> feeds) {
@@ -67,9 +88,9 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedRecyclerVi
         notifyDataSetChanged();
     }
 
-    public void refreshFeeds() {
-        this.viewModel.refreshFeeds();
-    }
+//    public void refreshFeeds() {
+//        this.viewModel.refreshFeeds();
+//    }
 
     @Override
     public int getItemCount() {

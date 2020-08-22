@@ -9,11 +9,13 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.pme.rssreader.R;
 import com.pme.rssreader.view.item.list.adapter.ItemRecyclerViewAdapter;
@@ -53,33 +55,37 @@ public class ItemListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        RecyclerView recyclerView = view.findViewById(R.id.fragment_item_list_recycler_view);
 
         itemViewModel = new ViewModelProvider(requireActivity(), factory).get(ItemViewModel.class);
 
+
+        Context context = view.getContext();
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        final ItemRecyclerViewAdapter adapter = new ItemRecyclerViewAdapter(context, itemViewModel, currentId);
+        recyclerView.setAdapter(adapter);
 
-            final ItemRecyclerViewAdapter adapter = new ItemRecyclerViewAdapter(context, itemViewModel, currentId);
-            recyclerView.setAdapter(adapter);
+        itemViewModel.getAllItems().observe(getViewLifecycleOwner(), adapter::setItems);
 
-            // Hide placeholder if a feed was added
-            if (adapter.getItemCount() > 0) {
-
+        // Swipe to refresh
+        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                itemViewModel.refreshFeed(currentId);
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(requireActivity(), "Feed updated!",
+                        Toast.LENGTH_LONG).show();
             }
+        });
 
-            itemViewModel.getAllItems().observe(getViewLifecycleOwner(), adapter::setItems);
+        itemViewModel.getItemSelectedEvent().observe(getViewLifecycleOwner(), item -> {
+            // Call activity method to show details container accordingly
+            ((ItemListActivity)requireActivity()).showDetailsContainer(item);
+        });
 
-            // Swipe layout?
-
-            itemViewModel.getItemSelectedEvent().observe(getViewLifecycleOwner(), item -> {
-                // Call activity method to show details container accordingly
-                ((ItemListActivity)requireActivity()).showDetailsContainer(item);
-            });
-
-        }
         return view;
     }
 

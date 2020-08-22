@@ -24,7 +24,7 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract FeedDao feedDao();
 
     private static final int NUMBER_OF_THREADS = 4;
-    static final ExecutorService databaseWriteExecutor =
+    static final ExecutorService databaseThreadExecutor =
             Executors.newFixedThreadPool(NUMBER_OF_THREADS);
 
     private static volatile AppDatabase INSTANCE;
@@ -53,7 +53,7 @@ public abstract class AppDatabase extends RoomDatabase {
 
             Log.i( LOG_TAG_DB, "onOpen() called" );
 
-            databaseWriteExecutor.execute(() -> {
+            databaseThreadExecutor.execute(() -> {
                 FeedDao dao = INSTANCE.feedDao();
 //                dao.deleteAll();
                 Feed f = new Feed("FHE AI Schwarzes Brett", "https://www.ai.fh-erfurt.de/rss.schwarzesbrett");

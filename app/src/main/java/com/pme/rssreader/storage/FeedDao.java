@@ -4,6 +4,7 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -26,13 +27,20 @@ public abstract class FeedDao {
     @Query("DELETE FROM Feed")
     public abstract void deleteAll();
 
-//    @Transaction
+    @Delete
+    public abstract void delete(Feed feed);
+
+    @Transaction
     @Query("SELECT * FROM Feed")
     public abstract LiveData<List<FeedWithItems>> getFeedsObservable();
 
-//    @Transaction
+    @Transaction
     @Query("SELECT * FROM Feed")
     public abstract List<FeedWithItems> getFeeds();
+
+    // Minimal feed, without items
+    @Query("SELECT * FROM Feed WHERE feedId = :feedId")
+    public abstract Feed getFeedById(int feedId);
 
     @Query("SELECT * FROM Item WHERE feedId = :feedId ORDER BY pubDate DESC")
     public abstract LiveData<List<Item>> getFeedItemsObservable(int feedId);
