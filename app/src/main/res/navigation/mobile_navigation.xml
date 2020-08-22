@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_feed_list">
+
+    <fragment
+        android:id="@+id/nav_feed_list"
+        android:name="com.pme.rssreader.view.feed.list.FeedListFragment"
+        android:label="Feed List"
+        tools:layout="@layout/fragment_feed_list" >
+        <action
+            android:id="@+id/action_nav_feed_list_to_nav_settings"
+            app:destination="@id/nav_settings"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right" />
+        <action
+            android:id="@+id/action_nav_feed_list_to_itemListActivity2"
+            app:destination="@id/itemListActivity2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_settings"
+        android:name="com.pme.rssreader.view.settings.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/settings_activity" />
+    <activity
+        android:id="@+id/itemListActivity2"
+        android:name="com.pme.rssreader.view.item.list.ItemListActivity"
+        android:label="item_fragment_layout"
+        tools:layout="@layout/item_fragment_layout" />
+
+    <!--    <fragment-->
+<!--        android:id="@+id/nav_gallery"-->
+<!--        android:name="com.pme.rssreader.view.drawer.ui.gallery.GalleryFragment"-->
+<!--        android:label="@string/menu_gallery"-->
+<!--        tools:layout="@layout/fragment_gallery" />-->
+
+<!--    <fragment-->
+<!--        android:id="@+id/nav_slideshow"-->
+<!--        android:name="com.pme.rssreader.view.drawer.ui.slideshow.SlideshowFragment"-->
+<!--        android:label="@string/menu_slideshow"-->
+<!--        tools:layout="@layout/fragment_slideshow" />-->
+</navigation>

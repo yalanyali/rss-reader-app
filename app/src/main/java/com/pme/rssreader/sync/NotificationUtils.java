@@ -12,13 +12,10 @@ import androidx.core.app.NotificationCompat;
 
 import com.pme.rssreader.R;
 import com.pme.rssreader.storage.model.Item;
-import com.pme.rssreader.view.FeedListActivity;
 import com.pme.rssreader.view.item.list.ItemListActivity;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 public class NotificationUtils {
 

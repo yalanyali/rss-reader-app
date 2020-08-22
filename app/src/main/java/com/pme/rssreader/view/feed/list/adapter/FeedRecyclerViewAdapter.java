@@ -1,4 +1,4 @@
-package com.pme.rssreader.view.adapter;
+package com.pme.rssreader.view.feed.list.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,15 +6,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pme.rssreader.R;
 import com.pme.rssreader.storage.model.FeedWithItems;
-import com.pme.rssreader.view.FeedListViewModel;
+import com.pme.rssreader.view.feed.list.FeedListViewModel;
 
 import java.util.List;
 
-public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.FeedViewHolder> {
+public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedRecyclerViewAdapter.FeedViewHolder> {
 
     static class FeedViewHolder extends RecyclerView.ViewHolder {
 
@@ -33,19 +34,20 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.FeedVi
     private final FeedListViewModel viewModel;
     private List<FeedWithItems> feeds;
 
-    public FeedListAdapter(Context context, FeedListViewModel viewModel) {
+    public FeedRecyclerViewAdapter(Context context, FeedListViewModel viewModel) {
         this.inflater = LayoutInflater.from(context);
         this.viewModel = viewModel;
     }
 
+    @NonNull
     @Override
-    public FeedViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = inflater.inflate(R.layout.list_item_feed, parent, false);
+    public FeedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View itemView = inflater.inflate(R.layout.row_feed, parent, false);
         return new FeedViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(FeedViewHolder holder, int index) {
+    public void onBindViewHolder(@NonNull FeedViewHolder holder, int index) {
         if (this.feeds != null) {
             FeedWithItems current = feeds.get(index);
             holder.feedListItemLinkTextView.setText(current.getFeed().getLink());
@@ -63,6 +65,10 @@ public class FeedListAdapter extends RecyclerView.Adapter<FeedListAdapter.FeedVi
     public void setFeeds(List<FeedWithItems> feeds) {
         this.feeds = feeds;
         notifyDataSetChanged();
+    }
+
+    public void refreshFeeds() {
+        this.viewModel.refreshFeeds();
     }
 
     @Override

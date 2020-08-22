@@ -1,4 +1,4 @@
-package com.pme.rssreader.view;
+package com.pme.rssreader.view.feed.newfeed;
 
 import android.content.Intent;
 import android.os.Bundle;

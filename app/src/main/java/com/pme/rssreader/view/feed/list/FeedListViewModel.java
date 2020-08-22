@@ -1,4 +1,4 @@
-package com.pme.rssreader.view;
+package com.pme.rssreader.view.feed.list;
 
 import android.app.Application;
 import android.util.Log;
@@ -31,12 +31,12 @@ public class FeedListViewModel extends AndroidViewModel {
         return allFeeds;
     }
 
-//    public void insert(Feed feed) {
-//        this.feedRepository.insert(feed);
-//    }
-
     public SingleLiveEvent<Integer> getItemSelectedEventObservable() {
         return itemSelectedEvent;
+    }
+
+    public void refreshFeeds() {
+        this.feedRepository.refreshAllFeeds();
     }
 
     public void setItemSelected(long feedId) {

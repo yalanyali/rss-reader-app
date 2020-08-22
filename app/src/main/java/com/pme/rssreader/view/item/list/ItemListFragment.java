@@ -36,11 +36,6 @@ public class ItemListFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-//        if (savedInstanceState != null) {
-            // Restore last state for higlighted position
-//        }
-
     }
 
     @Override
@@ -69,6 +64,11 @@ public class ItemListFragment extends Fragment {
 
             final ItemRecyclerViewAdapter adapter = new ItemRecyclerViewAdapter(context, itemViewModel, currentId);
             recyclerView.setAdapter(adapter);
+
+            // Hide placeholder if a feed was added
+            if (adapter.getItemCount() > 0) {
+
+            }
 
             itemViewModel.getAllItems().observe(getViewLifecycleOwner(), adapter::setItems);
 

@@ -58,8 +58,6 @@ public abstract class AppDatabase extends RoomDatabase {
 //                dao.deleteAll();
                 Feed f = new Feed("FHE AI Schwarzes Brett", "https://www.ai.fh-erfurt.de/rss.schwarzesbrett");
                 dao.insert(f);
-//                Feed f2 = new Feed("Tagesschau", "https://www.tagesschau.de/xml/rss2_https");
-//                dao.insert(f2);
                 Feed f3 = new Feed("Spiegel Online", "https://www.spiegel.de/schlagzeilen/tops/index.rss\n");
                 dao.insert(f3);
                 Feed f2 = new Feed("Test Feed", "https://lorem-rss.herokuapp.com/feed");

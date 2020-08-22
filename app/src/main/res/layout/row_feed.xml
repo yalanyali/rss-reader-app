@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:layout_marginTop="10dp"
+    android:layout_height="80dp"
     android:layout_marginLeft="10dp"
+    android:layout_marginTop="10dp"
     android:layout_marginRight="10dp"
     android:clickable="true"
-    android:focusable="true"
     android:elevation="60dp"
+    android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,13 +17,11 @@
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/row_item_title"
+            android:id="@+id/list_item_feed_name_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:text="Item Title"
-            android:textSize="22sp"
+            android:text="NAME"
+            android:textSize="10pt"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,31 +29,19 @@
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/row_item_content"
+            android:id="@+id/list_item_feed_link_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/row_item_title"
             android:ellipsize="end"
-            android:lineHeight="30dp"
             android:singleLine="true"
-            android:text="Item Content, longer than title."
-            android:textSize="12sp"
+            android:text="LINK"
+            android:textSize="8pt"
+            android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.6" />
+            app:layout_constraintVertical_bias="1.0" />
 
-        <TextView
-            android:id="@+id/row_item_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/row_item_title"
-            android:layout_gravity="end"
-            android:text="3 hr. ago"
-            android:textAlignment="viewEnd"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
