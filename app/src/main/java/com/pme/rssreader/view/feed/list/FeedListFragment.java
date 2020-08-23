@@ -24,7 +24,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.pme.rssreader.R;
 import com.pme.rssreader.storage.FeedRepository;
 import com.pme.rssreader.storage.model.Feed;
-import com.pme.rssreader.view.drawer.DrawerActivity;
 import com.pme.rssreader.view.feed.list.adapter.FeedRecyclerViewAdapter;
 import com.pme.rssreader.view.item.list.ItemListActivity;
 

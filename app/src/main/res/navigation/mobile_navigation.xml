@@ -18,6 +18,9 @@
         <action
             android:id="@+id/action_nav_feed_list_to_itemListActivity2"
             app:destination="@id/itemListActivity2" />
+        <action
+            android:id="@+id/action_nav_feed_list_to_newFeedFragment"
+            app:destination="@id/newFeedFragment" />
     </fragment>
 
     <fragment
@@ -30,6 +33,11 @@
         android:name="com.pme.rssreader.view.item.list.ItemListActivity"
         android:label="item_fragment_layout"
         tools:layout="@layout/item_fragment_layout" />
+    <fragment
+        android:id="@+id/newFeedFragment"
+        android:name="com.pme.rssreader.view.feed.newfeed.NewFeedFragment"
+        android:label="New Feed"
+        tools:layout="@layout/fragment_new_feed" />
 
     <!--    <fragment-->
 <!--        android:id="@+id/nav_gallery"-->
