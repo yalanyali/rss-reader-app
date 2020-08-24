@@ -1,8 +1,10 @@
-package com.pme.rssreader.view;
+package com.pme.rssreader.view.feed.list;
 
 import android.app.Application;
+import android.content.DialogInterface;
 import android.util.Log;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -31,12 +33,12 @@ public class FeedListViewModel extends AndroidViewModel {
         return allFeeds;
     }
 
-//    public void insert(Feed feed) {
-//        this.feedRepository.insert(feed);
-//    }
-
     public SingleLiveEvent<Integer> getItemSelectedEventObservable() {
         return itemSelectedEvent;
+    }
+
+    public void refreshFeeds() {
+        this.feedRepository.refreshAllFeeds();
     }
 
     public void setItemSelected(long feedId) {

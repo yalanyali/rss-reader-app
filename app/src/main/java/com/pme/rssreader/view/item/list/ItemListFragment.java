@@ -3,19 +3,24 @@ package com.pme.rssreader.view.item.list;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.pme.rssreader.R;
+import com.pme.rssreader.view.MainActivity;
+import com.pme.rssreader.view.item.ContainerFragment;
+import com.pme.rssreader.view.item.ItemViewModel;
 import com.pme.rssreader.view.item.list.adapter.ItemRecyclerViewAdapter;
 
 /**
@@ -36,11 +41,6 @@ public class ItemListFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-//        if (savedInstanceState != null) {
-            // Restore last state for higlighted position
-//        }
-
     }
 
     @Override
@@ -58,38 +58,38 @@ public class ItemListFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_item_list, container, false);
+        RecyclerView recyclerView = view.findViewById(R.id.fragment_item_list_recycler_view);
 
-        itemViewModel = new ViewModelProvider(requireActivity(), factory).get(ItemViewModel.class);
+        // Init the shared view model for item/detail fragments.
+        // Passing the activity context to let the view model live throughout the main activity lifecycle.
+        itemViewModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class);
+        itemViewModel.setFeedId(currentId);
+
+        Context context = view.getContext();
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
         // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        NavController navController = NavHostFragment.findNavController(this);
+        final ItemRecyclerViewAdapter adapter = new ItemRecyclerViewAdapter(context, itemViewModel, navController);
+        recyclerView.setAdapter(adapter);
 
-            final ItemRecyclerViewAdapter adapter = new ItemRecyclerViewAdapter(context, itemViewModel, currentId);
-            recyclerView.setAdapter(adapter);
 
-            itemViewModel.getAllItems().observe(getViewLifecycleOwner(), adapter::setItems);
 
-            // Swipe layout?
+        itemViewModel.getAllItems().observe(getViewLifecycleOwner(), adapter::setItems);
 
-            itemViewModel.getItemSelectedEvent().observe(getViewLifecycleOwner(), item -> {
-                // Call activity method to show details container accordingly
-                ((ItemListActivity)requireActivity()).showDetailsContainer(item);
-            });
+        // Swipe to refresh
+        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                itemViewModel.refreshFeed(currentId);
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(requireActivity(), "Feed updated!",
+                        Toast.LENGTH_LONG).show();
+            }
+        });
 
-        }
         return view;
     }
-
-    private final ViewModelProvider.Factory factory = new ViewModelProvider.Factory() {
-        @SuppressWarnings("unchecked")
-        @NonNull
-        @Override
-        public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new ItemViewModel(requireActivity().getApplication(), currentId);
-        }
-    };
 
 }

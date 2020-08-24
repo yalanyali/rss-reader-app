@@ -1,117 +1,66 @@
 package com.pme.rssreader.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.preference.PreferenceManager;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.View;
-import android.widget.Button;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.pme.rssreader.R;
-import com.pme.rssreader.storage.FeedRepository;
-import com.pme.rssreader.view.settings.SettingsActivity;
+import com.pme.rssreader.view.item.ItemViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String LOG_TAG_LIFE_CYCLES = "LifecycleCallbacks";
-    private static final String LOG_TAG_EVENTS = "EventCallbacks";
 
-    /*
-        Definition of a new click listener instance as anonymous class
-        Will handle all buttons from this activity
-    */
-    private View.OnClickListener buttonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-
-            Log.i( LOG_TAG_EVENTS, "Button tapped");
-
-            // Check which button was clicked
-            if(v.getId() == R.id.btn_to_feed_list) {
-                Log.i(LOG_TAG_EVENTS, "Go to Second Activity Button tapped");
-                goToFeedListActivity();
-            } else if (v.getId() == R.id.btn_new_feed) {
-                Log.i(LOG_TAG_EVENTS, "btn_new_feed tapped");
-                goToNewFeedActivity();
-            } else if (v.getId() == R.id.btn_to_settings) {
-                Log.i(LOG_TAG_EVENTS, "btn_to_settings tapped");
-                goToSettingsActivity();
-            }
-        }
-    };
+    private AppBarConfiguration appBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        // Link Buttons with Click Listener
-        Button toFeedList = findViewById(R.id.btn_to_feed_list);
-        toFeedList.setOnClickListener(this.buttonClickListener);
-        Button toNewFeed = findViewById(R.id.btn_new_feed);
-        toNewFeed.setOnClickListener(this.buttonClickListener);
-        Button toSettings = findViewById(R.id.btn_to_settings);
-        toSettings.setOnClickListener(this.buttonClickListener);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        // Passing each menu ID as a set of Ids because each
+        // menu should be considered as top level destinations.
+        appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.nav_feed_list, R.id.nav_settings)
+                .setOpenableLayout(drawer)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navigationView, navController);
 
-    }
-
-    private void goToFeedListActivity() {
-        Log.i(LOG_TAG_EVENTS, "Switching to Second Activity, Feed List");
-        Intent i = new Intent(MainActivity.this, FeedListActivity.class);
-        startActivity(i);
-    }
-
-    private void goToNewFeedActivity() {
-        Log.i(LOG_TAG_EVENTS, "Switching to New Feed Activity");
-        Intent i = new Intent(MainActivity.this, NewFeedActivity.class);
-        startActivity(i);
-    }
-
-    private void goToSettingsActivity() {
-        Log.i(LOG_TAG_EVENTS, "Switching to Settings Activity");
-        Intent i = new Intent(MainActivity.this, SettingsActivity.class);
-        startActivity(i);
-    }
-
-    /*
-        Life Cycle Callback Methods
-    */
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        Log.i(LOG_TAG_LIFE_CYCLES, "onStart() called");
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-
-        Log.i(LOG_TAG_LIFE_CYCLES, "onStop() called");
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.drawer, menu);
+        return true;
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-
-        Log.i(LOG_TAG_LIFE_CYCLES, "onPause() called");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Log.i(LOG_TAG_LIFE_CYCLES, "onResume() called");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        Log.i(LOG_TAG_LIFE_CYCLES, "onDestroy() called");
+    public boolean onSupportNavigateUp() {
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        return NavigationUI.navigateUp(navController, appBarConfiguration)
+                || super.onSupportNavigateUp();
     }
 
 }
