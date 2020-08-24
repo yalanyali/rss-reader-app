@@ -1,7 +1,6 @@
 package com.pme.rssreader.view.feed.list;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,10 +9,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -26,7 +23,6 @@ import com.pme.rssreader.R;
 import com.pme.rssreader.storage.FeedRepository;
 import com.pme.rssreader.storage.model.Feed;
 import com.pme.rssreader.view.feed.list.adapter.FeedRecyclerViewAdapter;
-import com.pme.rssreader.view.item.list.ItemListActivity;
 import com.pme.rssreader.view.item.list.ItemListFragment;
 
 /**
@@ -87,13 +83,16 @@ public class FeedListFragment extends Fragment implements FeedRecyclerViewAdapte
             placeholderText.setVisibility(View.GONE);
         }
 
-        feedListViewModel.getItemSelectedEventObservable().observe(this, feedId -> {
-            Log.w("SELECTED_FEED_ID", String.valueOf(feedId));
+        feedListViewModel.getItemSelectedEventObservable().observe(this, feed -> {
+            Log.w("SELECTED_FEED_ID", String.valueOf(feed.getFeedId()));
 //            Intent i = new Intent(requireContext(), ItemListActivity.class);
 //            i.putExtra(ItemListActivity.INTENT_EXTRA, feedId);
 //            startActivity(i);
             Bundle bundle = new Bundle();
-            bundle.putInt(ItemListFragment.INTENT_EXTRA, feedId);
+            // Pass feed id
+            bundle.putInt(ItemListFragment.EXTRA_FEED_ID, feed.getFeedId());
+            // Pass feed title for custom actionbar title: Argument name at mobile_navigation.xml
+            bundle.putString("FEED_TITLE", feed.getName());
             NavController navController = NavHostFragment.findNavController(this);
             navController.navigate(R.id.action_nav_feed_list_to_containerFragment, bundle);
         });
@@ -111,7 +110,7 @@ public class FeedListFragment extends Fragment implements FeedRecyclerViewAdapte
             }
         });
 
-        // Fab
+        // Fab button for new feed fragment
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(_view -> {
             NavHostFragment.findNavController(this)

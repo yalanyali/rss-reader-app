@@ -20,7 +20,6 @@ import android.widget.TextView;
 
 import com.pme.rssreader.R;
 import com.pme.rssreader.storage.model.Item;
-import com.pme.rssreader.view.MainActivity;
 import com.pme.rssreader.view.item.ItemViewModel;
 
 public class ItemDetailsFragment extends Fragment {

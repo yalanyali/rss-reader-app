@@ -77,63 +77,67 @@ public class FeedRepository {
         });
     }
 
-    // NOT TO BE USED IN MAIN THREAD
+    /**
+     * Used by background alarms to refresh feeds when app is closed.
+     * Triggers notification on new items.
+     */
     public void refreshFeedsInBackground() {
-        Log.e("refreshFeedsInBackground", "CALLED");
-        if (this.feedDao.getFeeds().size() == 0) {
-            Log.e("refreshFeedsInBackground", "WAS NULL");
-            return;
-        }
-        Log.e("refreshFeedsInBackground", "WAS NOT NULL");
-        NetworkApi api = NetworkController.getApi();
+        AppDatabase.databaseThreadExecutor.execute(() -> {
+            Log.e("refreshFeedsInBackground", "CALLED");
+            if (this.feedDao.getFeeds().size() == 0) {
+                Log.e("refreshFeedsInBackground", "WAS NULL");
+                return;
+            }
+            Log.e("refreshFeedsInBackground", "WAS NOT NULL");
+            NetworkApi api = NetworkController.getApi();
 
-        for (FeedWithItems currentFeed : this.feedDao.getFeeds()) {
-            Log.w("NETWORK CALL:", currentFeed.getFeed().getLink());
-            api.getFeed(currentFeed.getFeed().getLink()).enqueue(new Callback<XmlFeed>() {
-                @Override
-                public void onResponse(@NonNull Call<XmlFeed> call, @NonNull Response<XmlFeed> response) {
-                    if (response.isSuccessful()) {
-                        Log.w(LOG_TAG_NETWORK, "Network call: success.");
-                        Log.w("FEED", String.valueOf(currentFeed.getFeed().getFeedId()));
+            for (FeedWithItems currentFeed : this.feedDao.getFeeds()) {
+                Log.w("NETWORK CALL:", currentFeed.getFeed().getLink());
+                api.getFeed(currentFeed.getFeed().getLink()).enqueue(new Callback<XmlFeed>() {
+                    @Override
+                    public void onResponse(@NonNull Call<XmlFeed> call, @NonNull Response<XmlFeed> response) {
+                        if (response.isSuccessful()) {
+                            Log.w(LOG_TAG_NETWORK, "Network call: success.");
+                            Log.w("FEED", String.valueOf(currentFeed.getFeed().getFeedId()));
 
-                        List<Item> newItems = new ArrayList<>();
+                            List<Item> newItems = new ArrayList<>();
 
-                        if (response.body() != null) {
-                            for (XmlItem xmlItem : response.body().channel.item) {
-                                List<Item> currentFeedItems = currentFeed.getItems();
-                                Item currentItem = xmlItem.toItem();
+                            if (response.body() != null) {
+                                for (XmlItem xmlItem : response.body().channel.item) {
+                                    List<Item> currentFeedItems = currentFeed.getItems();
+                                    Item currentItem = xmlItem.toItem();
 
-                                Optional<Item> foundItem = currentFeedItems
-                                        .stream().parallel()
-                                        .filter(item -> item.getGuid().equals(currentItem.getGuid()))
-                                        .findAny();
+                                    Optional<Item> foundItem = currentFeedItems
+                                            .stream().parallel()
+                                            .filter(item -> item.getGuid().equals(currentItem.getGuid()))
+                                            .findAny();
 
-                                if (!foundItem.isPresent()) {
-                                    currentItem.setFeedName(currentFeed.getFeed().getName());
-                                    currentItem.setFeedId(currentFeed.getFeed().getFeedId());
-                                    newItems.add(currentItem);
+                                    if (!foundItem.isPresent()) {
+                                        currentItem.setFeedName(currentFeed.getFeed().getName());
+                                        currentItem.setFeedId(currentFeed.getFeed().getFeedId());
+                                        newItems.add(currentItem);
+                                    }
                                 }
                             }
-                        }
 
-                        // If any new items on current feed
-                        if (newItems.size() > 0) {
-                            // Insert items to DB
-                            insertItemsForFeed(currentFeed.getFeed(), newItems);
-                            // Notify the user
-                            NotificationUtils.createNotificationForNewItems(context, newItems);
+                            // If any new items on current feed
+                            if (newItems.size() > 0) {
+                                // Insert items to DB
+                                insertItemsForFeed(currentFeed.getFeed(), newItems);
+                                // Notify the user
+                                NotificationUtils.createNotificationForNewItems(context, newItems);
+                            }
                         }
                     }
-                }
 
-                @Override
-                public void onFailure(@NonNull Call<XmlFeed> call, @NonNull Throwable t) {
-                    Log.e(LOG_TAG_NETWORK, "Network call: error.");
-                    Log.e(LOG_TAG_NETWORK, Objects.requireNonNull(t.getMessage()));
-                }
-            });
-        }
-
+                    @Override
+                    public void onFailure(@NonNull Call<XmlFeed> call, @NonNull Throwable t) {
+                        Log.e(LOG_TAG_NETWORK, "Network call: error.");
+                        Log.e(LOG_TAG_NETWORK, Objects.requireNonNull(t.getMessage()));
+                    }
+                });
+            }
+        });
     }
 
     // Can be called on main thread, since it makes use of LiveData

@@ -29,13 +29,13 @@ public class ItemViewModel extends AndroidViewModel {
         return allItems;
     }
 
-    public Item getDefaultItem() {
-        if (allItems.getValue() != null && allItems.getValue().size() > 0) {
-            return allItems.getValue().get(0);
-        } else {
-            return null;
-        }
-    }
+//    public Item getDefaultItem() {
+//        if (allItems.getValue() != null && allItems.getValue().size() > 0) {
+//            return allItems.getValue().get(0);
+//        } else {
+//            return null;
+//        }
+//    }
 
     public SingleLiveEvent<Item> getItemSelectedEvent() {
         return itemSelectedEvent;
@@ -50,16 +50,11 @@ public class ItemViewModel extends AndroidViewModel {
     }
 
     /**
-     * Initializes the items observable.
-     * @param feedId
+     * Initializes the items observable of selected feed.
+     * @param feedId Selected feed id
      */
     public void setFeedId(int feedId) {
         allItems = feedRepository.getFeedItemsObservable(feedId);
     }
 
-    @Override
-    protected void onCleared() {
-        super.onCleared();
-        Log.e("ItemViewModel", "onCleared");
-    }
 }

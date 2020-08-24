@@ -1,10 +1,7 @@
 package com.pme.rssreader.view.feed.list;
 
 import android.app.Application;
-import android.content.DialogInterface;
-import android.util.Log;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
@@ -20,28 +17,35 @@ public class FeedListViewModel extends AndroidViewModel {
     private FeedRepository feedRepository;
     private LiveData<List<FeedWithItems>> allFeeds;
 
-    private SingleLiveEvent<Integer> itemSelectedEvent;
+    private SingleLiveEvent<Feed> selectedFeedEvent;
 
     public FeedListViewModel(Application application) {
         super(application);
         this.feedRepository = FeedRepository.getRepository(application.getApplicationContext());
         this.allFeeds = this.feedRepository.getAllFeedsObservable();
-        this.itemSelectedEvent = new SingleLiveEvent<>();
+        this.selectedFeedEvent = new SingleLiveEvent<>();
     }
 
     public LiveData<List<FeedWithItems>> getAllFeedsObservable() {
         return allFeeds;
     }
 
-    public SingleLiveEvent<Integer> getItemSelectedEventObservable() {
-        return itemSelectedEvent;
+    public SingleLiveEvent<Feed> getItemSelectedEventObservable() {
+        return selectedFeedEvent;
     }
 
     public void refreshFeeds() {
         this.feedRepository.refreshAllFeeds();
     }
 
-    public void setItemSelected(long feedId) {
-        this.itemSelectedEvent.setValue((int) feedId);
+    public void setItemSelected(Feed selectedFeed) {
+        this.selectedFeedEvent.setValue(selectedFeed);
     }
+
+//    public void getSelectedFeed() {
+//        if (this.allFeeds.getValue() == null) { return; }
+//        Optional<FeedWithItems> foundFeed = this.allFeeds.getValue()
+//                .stream().parallel()
+//                .
+//    }
 }

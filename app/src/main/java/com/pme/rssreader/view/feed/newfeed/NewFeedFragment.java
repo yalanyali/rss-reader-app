@@ -1,7 +1,5 @@
 package com.pme.rssreader.view.feed.newfeed;
 
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -10,24 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.pme.rssreader.R;
 import com.pme.rssreader.storage.FeedRepository;
 import com.pme.rssreader.storage.model.Feed;
-import com.pme.rssreader.view.feed.list.FeedListViewModel;
-import com.pme.rssreader.view.feed.list.adapter.FeedRecyclerViewAdapter;
-import com.pme.rssreader.view.item.list.ItemListActivity;
-
-import java.util.Objects;
 
 public class NewFeedFragment extends Fragment {
 

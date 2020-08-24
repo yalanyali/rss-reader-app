@@ -15,7 +15,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.pme.rssreader.R;
 import com.pme.rssreader.view.item.details.ItemDetailsFragment;
 import com.pme.rssreader.view.item.list.ItemListFragment;
-import com.pme.rssreader.view.item.list.adapter.ItemRecyclerViewAdapter;
 
 public class ContainerFragment extends Fragment {
 
@@ -24,8 +23,6 @@ public class ContainerFragment extends Fragment {
 
     private Fragment itemDetailsFragment;
     public static String ITEM_DETAILS_FRAGMENT_TAG = "ITEM_DETAILS";
-
-    private int currentFeedId;
 
     @Nullable
     @Override
@@ -37,8 +34,6 @@ public class ContainerFragment extends Fragment {
             Log.e("ContainerFragment", "onCreateView/no arguments");
             return view;
         }
-
-        currentFeedId = getArguments().getInt(ItemListFragment.INTENT_EXTRA);
 
         inflateItemListContainer();
 
@@ -65,8 +60,7 @@ public class ContainerFragment extends Fragment {
 
         // Create
         itemListFragment = ItemListFragment.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putInt(ItemListFragment.INTENT_EXTRA, currentFeedId);
+        Bundle bundle = requireArguments(); // Pass own bundle for "currentFeedId" and FEED_TITLE
         itemListFragment.setArguments(bundle);
 
         FragmentTransaction ft = fm.beginTransaction();

@@ -27,7 +27,7 @@
         android:id="@+id/nav_settings"
         android:name="com.pme.rssreader.view.settings.SettingsFragment"
         android:label="Settings"
-        tools:layout="@layout/settings_activity" />
+        tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/newFeedFragment"
         android:name="com.pme.rssreader.view.feed.newfeed.NewFeedFragment"
@@ -36,16 +36,25 @@
     <fragment
         android:id="@+id/containerFragment"
         android:name="com.pme.rssreader.view.item.ContainerFragment"
-        android:label="ContainerFragment" >
+        android:label="{FEED_TITLE}" >
         <action
             android:id="@+id/action_containerFragment_to_itemDetailsFragment"
             app:destination="@id/itemDetailsFragment" />
+        <argument
+            android:name="FEED_TITLE"
+            app:argType="string"
+            android:defaultValue="Feed Items" />
     </fragment>
     <fragment
         android:id="@+id/itemDetailsFragment"
         android:name="com.pme.rssreader.view.item.details.ItemDetailsFragment"
-        android:label="fragment_detail"
-        tools:layout="@layout/fragment_detail" />
+        android:label="{FEED_TITLE}"
+        tools:layout="@layout/fragment_detail" >
+        <argument
+            android:name="FEED_TITLE"
+            app:argType="string"
+            android:defaultValue="Details" />
+    </fragment>
 
     <!--    <fragment-->
 <!--        android:id="@+id/nav_gallery"-->

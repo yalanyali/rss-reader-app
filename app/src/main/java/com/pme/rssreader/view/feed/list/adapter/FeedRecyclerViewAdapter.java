@@ -60,7 +60,7 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedRecyclerVi
             holder.feedListItemNameTextView.setText(current.getFeed().getName());
 
             holder.itemView.setOnClickListener(view ->
-                viewModel.setItemSelected(current.getFeed().getFeedId())
+                viewModel.setItemSelected(current.getFeed())
             );
 
             holder.itemView.setOnLongClickListener(view -> {

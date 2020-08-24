@@ -31,9 +31,9 @@ public class Item implements Serializable {
 
     private String guid;
 
-    // NOT IN DATABASE, NOT POPULATED
+    // NOT IN DATABASE, NOT POPULATED!
     // This is only for a quick lookup for notifications.
-    // It only gets populated on new items.
+    // It gets populated manually on new items.
     @Ignore
     private String feedName;
 
@@ -108,6 +108,11 @@ public class Item implements Serializable {
         this.content = content;
     }
 
+    /**
+     * NOT IN DATABASE, NOT POPULATED!
+     * This is only for a quick lookup for notifications.
+     * It gets populated manually on new items.
+     */
     public String getFeedName() {
         return feedName;
     }

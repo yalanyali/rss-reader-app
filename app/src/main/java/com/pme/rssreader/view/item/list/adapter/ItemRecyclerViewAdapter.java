@@ -2,7 +2,9 @@ package com.pme.rssreader.view.item.list.adapter;
 
 
 import android.content.Context;
+import android.os.Bundle;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,11 +49,14 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     private Context context;
     private NavController navController;
 
-    public ItemRecyclerViewAdapter(Context context, ItemViewModel viewModel, NavController navController) {
+    private String feedTitle;
+
+    public ItemRecyclerViewAdapter(Context context, ItemViewModel viewModel, NavController navController, String feedTitle) {
         this.inflater = LayoutInflater.from(context);
         this.viewModel = viewModel;
         this.context = context;
         this.navController = navController;
+        this.feedTitle = feedTitle;
     }
 
     @NonNull
@@ -94,7 +99,9 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     public void setItems(List<Item> items) {
         this.items = items;
         // Set selected as the first one
-        viewModel.setItemSelected(items.get(0));
+        if (items.size() > 0) {
+            viewModel.setItemSelected(items.get(0));
+        }
         notifyDataSetChanged();
     }
 
@@ -110,9 +117,12 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
         Fragment detailsFragment = ((AppCompatActivity)context).getSupportFragmentManager()
                 .findFragmentByTag(ContainerFragment.ITEM_DETAILS_FRAGMENT_TAG);
 
-        if (detailsFragment == null) {
-            // Details fragment is not shown, navigate
-            navController.navigate(R.id.action_containerFragment_to_itemDetailsFragment);
+        if (detailsFragment == null || !detailsFragment.isVisible()) {
+            // Details fragment is not shown, navigate.
+            // Pass custom title
+            Bundle bundle = new Bundle();
+            bundle.putString("FEED_TITLE", feedTitle);
+            navController.navigate(R.id.action_containerFragment_to_itemDetailsFragment, bundle);
         }
     }
 

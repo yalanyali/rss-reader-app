@@ -1,12 +1,14 @@
-package com.pme.rssreader.view;
+package com.pme.rssreader;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,10 +23,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.pme.rssreader.R;
 import com.pme.rssreader.view.item.ItemViewModel;
+import com.pme.rssreader.view.item.list.ItemListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG_LIFE_CYCLES = "LifecycleCallbacks";
+    public static final String INTENT_EXTRA_NAVIGATE_TO_FEED_ID = "NAVIGATE_TO_FEED_ID";
+    public static final String INTENT_EXTRA_NAVIGATE_TO_FEED_NAME = "NAVIGATE_TO_FEED_NAME";
 
     private AppBarConfiguration appBarConfiguration;
 
@@ -47,6 +51,19 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        // MainActivity can be called from a background alarm.
+        // The idea is to notify the user of new items on a specific feed.
+        // So the alarm triggers an intent with extras and MainActivity navigates after it gets opened.
+        if (getIntent().getExtras() != null) {
+            int feedIdToNavigate = getIntent().getIntExtra(INTENT_EXTRA_NAVIGATE_TO_FEED_ID, -1);
+            String feedName = getIntent().getStringExtra(INTENT_EXTRA_NAVIGATE_TO_FEED_NAME);
+            if (feedIdToNavigate != -1 && feedName != null) {
+                Bundle bundle = new Bundle();
+                bundle.putInt(ItemListFragment.EXTRA_FEED_ID, feedIdToNavigate);
+                bundle.putString("FEED_TITLE", feedName);
+                navController.navigate(R.id.action_nav_feed_list_to_containerFragment, bundle);
+            }
+        }
     }
 
     @Override

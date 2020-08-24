@@ -18,21 +18,24 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.pme.rssreader.R;
-import com.pme.rssreader.view.MainActivity;
-import com.pme.rssreader.view.item.ContainerFragment;
 import com.pme.rssreader.view.item.ItemViewModel;
 import com.pme.rssreader.view.item.list.adapter.ItemRecyclerViewAdapter;
+
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * A fragment representing a list of Items.
  */
 public class ItemListFragment extends Fragment {
 
-    public static String INTENT_EXTRA = "SELECTED_FEED_ID";
+    public static String EXTRA_FEED_ID = "SELECTED_FEED_ID";
+    public static String EXTRA_FEED_TITLE = "SELECTED_FEED_TITLE";
 
     private ItemViewModel itemViewModel;
 
     private int currentId;
+    private String currentTitle;
 
     public static ItemListFragment newInstance() {
         return new ItemListFragment();
@@ -47,10 +50,9 @@ public class ItemListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            currentId = getArguments().getInt(INTENT_EXTRA);
-            Log.e("ItemListFragment", String.valueOf(currentId));
-        }
+        currentId = requireArguments().getInt(EXTRA_FEED_ID);
+        currentTitle = requireArguments().getString("FEED_TITLE");
+        Log.e("ItemListFragment", String.valueOf(currentId));
     }
 
     @Override
@@ -70,12 +72,12 @@ public class ItemListFragment extends Fragment {
 
         // Set the adapter
         NavController navController = NavHostFragment.findNavController(this);
-        final ItemRecyclerViewAdapter adapter = new ItemRecyclerViewAdapter(context, itemViewModel, navController);
+        final ItemRecyclerViewAdapter adapter = new ItemRecyclerViewAdapter(context, itemViewModel, navController, requireArguments().getString("FEED_TITLE"));
         recyclerView.setAdapter(adapter);
 
-
-
         itemViewModel.getAllItems().observe(getViewLifecycleOwner(), adapter::setItems);
+
+//        Log.e("TEST", itemViewModel.);
 
         // Swipe to refresh
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
