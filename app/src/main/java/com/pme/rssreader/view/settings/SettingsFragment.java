@@ -5,9 +5,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.fragment.app.DialogFragment;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
+import me.philio.preferencecompatextended.PreferenceFragmentCompat;
 
 import com.pme.rssreader.R;
 import com.pme.rssreader.core.Constants;
@@ -30,7 +29,15 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 int nightMode = sharedPreferences.getBoolean(key, false) ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
                 AppCompatDelegate.setDefaultNightMode(nightMode);
                 break;
-            case "colorAccent":
+            case Constants.SETTING_SYNC_WITHIN_HOURS_ENABLED:
+                boolean syncWithinHoursEnabled = sharedPreferences.getBoolean(key, false);
+                Log.e("syncWithinHoursEnabled", String.valueOf(syncWithinHoursEnabled));
+                break;
+            case Constants.SETTING_SYNC_TIME_START_SECONDS:
+                Log.e("SETTING_SYNC_TIME_START_SECONDS", String.valueOf(sharedPreferences.getInt(key, -1)));
+                break;
+            case Constants.SETTING_SYNC_TIME_END_SECONDS:
+                Log.e("SETTING_SYNC_TIME_END_SECONDS", String.valueOf(sharedPreferences.getInt(key, -1)));
                 break;
             case Constants.SETTING_SYNC_INTERVAL:
             case Constants.SETTING_SYNC_ENABLED:
@@ -54,5 +61,5 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
-    
+
 }

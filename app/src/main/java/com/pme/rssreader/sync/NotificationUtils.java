@@ -6,12 +6,16 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import com.pme.rssreader.R;
+import com.pme.rssreader.core.App;
+import com.pme.rssreader.core.Constants;
 import com.pme.rssreader.storage.model.Item;
 import com.pme.rssreader.MainActivity;
 
@@ -29,8 +33,7 @@ public class NotificationUtils {
     public static void createNotificationForNewItems(Context context, List<Item> items) {
         Log.e("createNotificationForNewItems", String.valueOf(items.size()));
 
-        // No notification when in foreground
-        if (runningInForeground()) { return; }
+        if (!conditionsPassed(context)) { return; }
 
         if (items.size() > 0) {
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID);
@@ -88,5 +91,15 @@ public class NotificationUtils {
         return (appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE);
     }
 
+    public static boolean conditionsPassed(Context context) {
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
+
+        boolean syncButDontNotify = sp.getBoolean(Constants.SYNC_WITHIN_HOURS_BUT_DONT_NOTIFY, false);
+
+        if (syncButDontNotify || runningInForeground()) { return false; }
+
+        return true;
+    }
 
 }

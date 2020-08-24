@@ -1,27 +1,30 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory app:title="@string/theme_header">
+    <PreferenceCategory app:title="@string/theme_header" app:iconSpaceReserved="false">
 
         <SwitchPreferenceCompat
             app:key="DARK_MODE_ENABLED"
-            app:title="@string/dark_mode_title" />
+            app:title="@string/dark_mode_title"
+            app:iconSpaceReserved="false" />
 
-        <ListPreference
-            app:defaultValue="Color 1"
-            app:entries="@array/accent_entries"
-            app:entryValues="@array/accent_values"
-            app:key="colorAccent"
-            app:title="@string/accent_color_title" />
+<!--        <ListPreference-->
+<!--            app:defaultValue="Color 1"-->
+<!--            app:entries="@array/accent_entries"-->
+<!--            app:entryValues="@array/accent_values"-->
+<!--            app:key="colorAccent"-->
+<!--            app:title="@string/accent_color_title"-->
+<!--            app:iconSpaceReserved="false" />-->
 
     </PreferenceCategory>
-    <PreferenceCategory app:title="@string/sync_header">
+    <PreferenceCategory app:title="@string/sync_header" app:iconSpaceReserved="false" app:allowDividerAbove="false">
 
         <SwitchPreferenceCompat
             app:key="SYNC_ENABLED"
             app:title="@string/sync_title"
             app:summaryOff="@string/sync_summary_off"
-            app:summaryOn="@string/sync_summary_on" />
+            app:summaryOn="@string/sync_summary_on"
+            app:iconSpaceReserved="false" />
 
         <ListPreference
             app:dependency="SYNC_ENABLED"
@@ -30,7 +33,50 @@
             app:entryValues="@array/sync_values"
             app:defaultValue="30"
             app:summary="%s"
-            app:title="@string/sync_interval_title" />
+            app:title="@string/sync_interval_title"
+            app:iconSpaceReserved="false" />
+
+        <!--  -->
+
+        <SwitchPreferenceCompat
+            app:dependency="SYNC_ENABLED"
+            app:key="SYNC_WITHIN_HOURS_ENABLED"
+            app:title="Sync only between specific times"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:dependency="SYNC_WITHIN_HOURS_ENABLED"
+            app:key="SYNC_WITHIN_HOURS_BUT_DONT_NOTIFY"
+            app:title="Only mute notifications"
+            app:summaryOff="Feeds will not get updated outside of selected time period."
+            app:summaryOn="Feeds will still get updated outside of selected time period."
+            app:iconSpaceReserved="false" />
+
+        <TimePickerPreference
+            app:dependency="SYNC_WITHIN_HOURS_ENABLED"
+            android:key="SYNC_TIME_START"
+            android:title="Start Time"
+            app:defaultHours="10"
+            app:defaultMins="0"
+            app:timeAsSummary="true"
+            app:timeFormat="hours24"
+            app:dialogTimeFormat="hours24"
+            app:iconSpaceReserved="false"
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"/>
+
+        <TimePickerPreference
+            app:dependency="SYNC_WITHIN_HOURS_ENABLED"
+            android:key="SYNC_TIME_END"
+            android:title="End Time"
+            app:defaultHours="18"
+            app:defaultMins="0"
+            app:timeAsSummary="true"
+            app:timeFormat="hours24"
+            app:dialogTimeFormat="hours24"
+            app:iconSpaceReserved="false"
+            app:allowDividerAbove="false"
+            app:allowDividerBelow="false"/>
 
     </PreferenceCategory>
 

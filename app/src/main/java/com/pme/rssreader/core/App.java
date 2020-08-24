@@ -15,15 +15,13 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         Log.i(LOG_TAG, "Application onCreate.");
         loadPreferences();
-
-        // Alarm manager tests
-//        this.setUpdateInterval(true, 60);
-//        AlarmService.setOrUpdateAlarm(getApplicationContext(), 60);
     }
 
+    /**
+     * Load preferences on app start.
+     */
     private void loadPreferences() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
 
