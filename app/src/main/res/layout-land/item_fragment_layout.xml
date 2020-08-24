@@ -3,7 +3,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:baselineAligned="false"
-    tools:context=".view.item.list.ItemListActivity"
+    tools:context=".view.item.list.ItemListFragment"
     android:orientation="horizontal">
 
     <FrameLayout

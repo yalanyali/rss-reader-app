@@ -9,19 +9,20 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.text.HtmlCompat;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.pme.rssreader.R;
 import com.pme.rssreader.storage.model.Item;
-import com.pme.rssreader.view.item.list.ItemViewModel;
+import com.pme.rssreader.view.item.ContainerFragment;
+import com.pme.rssreader.view.item.ItemViewModel;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 
 public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerViewAdapter.ViewHolder> {
@@ -43,9 +44,14 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     private List<Item> items;
     private ItemViewModel viewModel;
 
-    public ItemRecyclerViewAdapter(Context context, ItemViewModel viewModel, int feedId) {
+    private Context context;
+    private NavController navController;
+
+    public ItemRecyclerViewAdapter(Context context, ItemViewModel viewModel, NavController navController) {
         this.inflater = LayoutInflater.from(context);
         this.viewModel = viewModel;
+        this.context = context;
+        this.navController = navController;
     }
 
     @NonNull
@@ -71,7 +77,11 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             String relativeTimeSpanString = (String) DateUtils.getRelativeTimeSpanString(pubDate.getTime(), currentDate.getTime(), DateUtils.SECOND_IN_MILLIS);
             holder.date.setText(relativeTimeSpanString);
 
-            holder.itemView.setOnClickListener(view -> viewModel.setItemSelected(current));
+            holder.itemView.setOnClickListener(view -> {
+                viewModel.setItemSelected(current);
+                // Check if navigation needed
+                navigateMaybe();
+            });
 
         } else {
             holder.title.setText("???");
@@ -83,6 +93,8 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
 
     public void setItems(List<Item> items) {
         this.items = items;
+        // Set selected as the first one
+        viewModel.setItemSelected(items.get(0));
         notifyDataSetChanged();
     }
 
@@ -91,5 +103,17 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
         return this.items != null ? this.items.size() : 0;
     }
 
+    /**
+     * If details pane is not shown, navigates to details fragment
+     */
+    private void navigateMaybe() {
+        Fragment detailsFragment = ((AppCompatActivity)context).getSupportFragmentManager()
+                .findFragmentByTag(ContainerFragment.ITEM_DETAILS_FRAGMENT_TAG);
+
+        if (detailsFragment == null) {
+            // Details fragment is not shown, navigate
+            navController.navigate(R.id.action_containerFragment_to_itemDetailsFragment);
+        }
+    }
 
 }

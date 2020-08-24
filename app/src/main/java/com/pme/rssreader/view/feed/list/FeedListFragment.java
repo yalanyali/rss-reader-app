@@ -21,11 +21,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.pme.rssreader.R;
 import com.pme.rssreader.storage.FeedRepository;
 import com.pme.rssreader.storage.model.Feed;
 import com.pme.rssreader.view.feed.list.adapter.FeedRecyclerViewAdapter;
 import com.pme.rssreader.view.item.list.ItemListActivity;
+import com.pme.rssreader.view.item.list.ItemListFragment;
 
 /**
  * A fragment representing a list of feeds.
@@ -66,7 +68,6 @@ public class FeedListFragment extends Fragment implements FeedRecyclerViewAdapte
         final FeedRecyclerViewAdapter adapter = new FeedRecyclerViewAdapter(context, feedListViewModel, this);
         recyclerView.setAdapter(adapter);
 
-
         feedListViewModel.getAllFeedsObservable().observe(getViewLifecycleOwner(), feeds -> {
             if (feeds.size() > 0) {
                 if (placeholderActive) {
@@ -88,10 +89,15 @@ public class FeedListFragment extends Fragment implements FeedRecyclerViewAdapte
 
         feedListViewModel.getItemSelectedEventObservable().observe(this, feedId -> {
             Log.w("SELECTED_FEED_ID", String.valueOf(feedId));
-            Intent i = new Intent(requireContext(), ItemListActivity.class);
-            i.putExtra(ItemListActivity.INTENT_EXTRA, feedId);
-            startActivity(i);
+//            Intent i = new Intent(requireContext(), ItemListActivity.class);
+//            i.putExtra(ItemListActivity.INTENT_EXTRA, feedId);
+//            startActivity(i);
+            Bundle bundle = new Bundle();
+            bundle.putInt(ItemListFragment.INTENT_EXTRA, feedId);
+            NavController navController = NavHostFragment.findNavController(this);
+            navController.navigate(R.id.action_nav_feed_list_to_containerFragment, bundle);
         });
+
 
         // Swipe to refresh
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
@@ -103,6 +109,13 @@ public class FeedListFragment extends Fragment implements FeedRecyclerViewAdapte
                 Toast.makeText(requireActivity(), "Feeds updated!",
                         Toast.LENGTH_LONG).show();
             }
+        });
+
+        // Fab
+        FloatingActionButton fab = view.findViewById(R.id.fab);
+        fab.setOnClickListener(_view -> {
+            NavHostFragment.findNavController(this)
+                .navigate(R.id.action_nav_feed_list_to_newFeedFragment);
         });
 
         return view;

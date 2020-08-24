@@ -1,8 +1,11 @@
 package com.pme.rssreader.view;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
@@ -17,6 +20,7 @@ import android.view.View;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.pme.rssreader.R;
+import com.pme.rssreader.view.item.ItemViewModel;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -43,12 +47,6 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-        // FIXME: Temporary fab
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(view -> {
-            navController.navigate(R.id.action_nav_feed_list_to_newFeedFragment);
-        });
-
     }
 
     @Override
@@ -63,45 +61,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
-    }
-
-
-    /*
-        Life Cycle Callback Methods
-    */
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-        Log.i(LOG_TAG_LIFE_CYCLES, "onStart() called");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        Log.i(LOG_TAG_LIFE_CYCLES, "onStop() called");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        Log.i(LOG_TAG_LIFE_CYCLES, "onPause() called");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Log.i(LOG_TAG_LIFE_CYCLES, "onResume() called");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        Log.i(LOG_TAG_LIFE_CYCLES, "onDestroy() called");
     }
 
 }

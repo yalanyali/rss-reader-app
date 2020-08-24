@@ -26,14 +26,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".view.item.list.ItemListActivity"
-            android:label="@string/title_activity_item_view" />
-        <activity android:name=".view.feed.list.FeedListActivity" />
-        <activity
-            android:name=".view.item.details.DetailsActivity"
-            android:label="@string/title_activity_details" />
-
         <receiver
             android:name=".sync.AlarmReceiver"
             android:enabled="true"

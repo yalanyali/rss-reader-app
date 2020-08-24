@@ -1,6 +1,7 @@
-package com.pme.rssreader.view.item.list;
+package com.pme.rssreader.view.item;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -18,10 +19,9 @@ public class ItemViewModel extends AndroidViewModel {
 
     private FeedRepository feedRepository;
 
-    public ItemViewModel(Application application, int feedId) {
+    public ItemViewModel(Application application) {
         super(application);
         feedRepository = FeedRepository.getRepository(application);
-        allItems = feedRepository.getFeedItemsObservable(feedId);
         itemSelectedEvent = new SingleLiveEvent<>();
     }
 
@@ -49,4 +49,17 @@ public class ItemViewModel extends AndroidViewModel {
         this.feedRepository.refreshFeed(feedId);
     }
 
+    /**
+     * Initializes the items observable.
+     * @param feedId
+     */
+    public void setFeedId(int feedId) {
+        allItems = feedRepository.getFeedItemsObservable(feedId);
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        Log.e("ItemViewModel", "onCleared");
+    }
 }

@@ -16,11 +16,11 @@
             app:enterAnim="@android:anim/slide_in_left"
             app:popExitAnim="@android:anim/slide_out_right" />
         <action
-            android:id="@+id/action_nav_feed_list_to_itemListActivity2"
-            app:destination="@id/itemListActivity2" />
-        <action
             android:id="@+id/action_nav_feed_list_to_newFeedFragment"
             app:destination="@id/newFeedFragment" />
+        <action
+            android:id="@+id/action_nav_feed_list_to_containerFragment"
+            app:destination="@id/containerFragment" />
     </fragment>
 
     <fragment
@@ -28,16 +28,24 @@
         android:name="com.pme.rssreader.view.settings.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/settings_activity" />
-    <activity
-        android:id="@+id/itemListActivity2"
-        android:name="com.pme.rssreader.view.item.list.ItemListActivity"
-        android:label="item_fragment_layout"
-        tools:layout="@layout/item_fragment_layout" />
     <fragment
         android:id="@+id/newFeedFragment"
         android:name="com.pme.rssreader.view.feed.newfeed.NewFeedFragment"
         android:label="New Feed"
         tools:layout="@layout/fragment_new_feed" />
+    <fragment
+        android:id="@+id/containerFragment"
+        android:name="com.pme.rssreader.view.item.ContainerFragment"
+        android:label="ContainerFragment" >
+        <action
+            android:id="@+id/action_containerFragment_to_itemDetailsFragment"
+            app:destination="@id/itemDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemDetailsFragment"
+        android:name="com.pme.rssreader.view.item.details.ItemDetailsFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" />
 
     <!--    <fragment-->
 <!--        android:id="@+id/nav_gallery"-->
