@@ -8,7 +8,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_item_list_recycler_view"
-        android:name="com.pme.rssreader.view.ItemFragment"
+        android:name="org.pme.rssreader.view.ItemFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="LinearLayoutManager"

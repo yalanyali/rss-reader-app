@@ -39,7 +39,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/fragment_feed_list_recycler_view"
-            android:name="com.pme.rssreader.view.feed.list.FeedListActivity"
+            android:name="org.pme.rssreader.view.feed.list.FeedListActivity"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layoutManager="LinearLayoutManager"

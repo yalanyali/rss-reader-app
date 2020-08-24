@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/nav_feed_list"
-        android:name="com.pme.rssreader.view.feed.list.FeedListFragment"
+        android:name="org.pme.rssreader.view.feed.list.FeedListFragment"
         android:label="Feed List"
         tools:layout="@layout/fragment_feed_list" >
         <action
@@ -25,17 +25,17 @@
 
     <fragment
         android:id="@+id/nav_settings"
-        android:name="com.pme.rssreader.view.settings.SettingsFragment"
+        android:name="org.pme.rssreader.view.settings.SettingsFragment"
         android:label="Settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/newFeedFragment"
-        android:name="com.pme.rssreader.view.feed.newfeed.NewFeedFragment"
+        android:name="org.pme.rssreader.view.feed.newfeed.NewFeedFragment"
         android:label="New Feed"
         tools:layout="@layout/fragment_new_feed" />
     <fragment
         android:id="@+id/containerFragment"
-        android:name="com.pme.rssreader.view.item.ContainerFragment"
+        android:name="org.pme.rssreader.view.item.ContainerFragment"
         android:label="{FEED_TITLE}" >
         <action
             android:id="@+id/action_containerFragment_to_itemDetailsFragment"
@@ -47,7 +47,7 @@
     </fragment>
     <fragment
         android:id="@+id/itemDetailsFragment"
-        android:name="com.pme.rssreader.view.item.details.ItemDetailsFragment"
+        android:name="org.pme.rssreader.view.item.details.ItemDetailsFragment"
         android:label="{FEED_TITLE}"
         tools:layout="@layout/fragment_detail" >
         <argument
@@ -58,13 +58,13 @@
 
     <!--    <fragment-->
 <!--        android:id="@+id/nav_gallery"-->
-<!--        android:name="com.pme.rssreader.view.drawer.ui.gallery.GalleryFragment"-->
+<!--        android:name="org.pme.rssreader.view.drawer.ui.gallery.GalleryFragment"-->
 <!--        android:label="@string/menu_gallery"-->
 <!--        tools:layout="@layout/fragment_gallery" />-->
 
 <!--    <fragment-->
 <!--        android:id="@+id/nav_slideshow"-->
-<!--        android:name="com.pme.rssreader.view.drawer.ui.slideshow.SlideshowFragment"-->
+<!--        android:name="org.pme.rssreader.view.drawer.ui.slideshow.SlideshowFragment"-->
 <!--        android:label="@string/menu_slideshow"-->
 <!--        tools:layout="@layout/fragment_slideshow" />-->
 </navigation>
