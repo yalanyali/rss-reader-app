@@ -42,10 +42,4 @@ public class FeedListViewModel extends AndroidViewModel {
         this.selectedFeedEvent.setValue(selectedFeed);
     }
 
-//    public void getSelectedFeed() {
-//        if (this.allFeeds.getValue() == null) { return; }
-//        Optional<FeedWithItems> foundFeed = this.allFeeds.getValue()
-//                .stream().parallel()
-//                .
-//    }
 }

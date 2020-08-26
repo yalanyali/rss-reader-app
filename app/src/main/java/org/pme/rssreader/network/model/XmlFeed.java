@@ -5,7 +5,9 @@ import org.simpleframework.xml.Namespace;
 import org.simpleframework.xml.NamespaceList;
 import org.simpleframework.xml.Root;
 
-
+/**
+ * XML feed model. A feed has a channel.
+ */
 @NamespaceList({
     @Namespace(reference = "http://purl.org/rss/1.0/"),
     @Namespace(prefix = "content", reference = "http://purl.org/rss/1.0/modules/content/")

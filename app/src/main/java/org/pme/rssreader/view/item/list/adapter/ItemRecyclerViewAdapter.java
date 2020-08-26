@@ -87,9 +87,9 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             });
 
         } else {
-            holder.title.setText("???");
-            holder.content.setText("???");
-            holder.date.setText("???");
+            holder.title.setText(R.string.generic_placeholder);
+            holder.content.setText(R.string.generic_placeholder);
+            holder.date.setText(R.string.generic_placeholder);
         }
     }
 

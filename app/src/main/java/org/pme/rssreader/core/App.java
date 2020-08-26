@@ -1,35 +1,57 @@
 package org.pme.rssreader.core;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.preference.PreferenceManager;
 
+import java.util.Calendar;
 
+/**
+ * Application class for extension purposes.
+ */
 public class App extends Application {
-
-    private static final String LOG_TAG = "Application";
 
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i(LOG_TAG, "Application onCreate.");
-        loadPreferences();
+        checkAndApplyDarkMode(this);
     }
 
     /**
-     * Load preferences on app start.
+     * Checks if dark mode should be enabled depending on current time
+     * @param context To access SharedPreferences
      */
-    private void loadPreferences() {
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
+    public static boolean shouldEnableDarkMode(Context context) {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 
-        // Handle dark mode switch
-        if (sp.getBoolean(Constants.SETTING_DARK_MODE_ENABLED, false)) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        boolean autoDarkModeEnabled = sp.getBoolean(Constants.SETTING_AUTO_DARK_MODE_ENABLED, false);
+        if (autoDarkModeEnabled) {
+            int hourOfDay = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+            Log.e("hourOfDay", String.valueOf(hourOfDay));
+            return !(hourOfDay > 7 && hourOfDay < 19);
         }
 
+        //noinspection UnnecessaryLocalVariable
+        boolean darkModeEnabled = sp.getBoolean(Constants.SETTING_DARK_MODE_ENABLED, false);
+
+        return darkModeEnabled;
+    }
+
+    public static void setDarkMode(boolean enabled) {
+        if (enabled) {
+            // Light theme
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
+    public static void checkAndApplyDarkMode(Context context) {
+        setDarkMode(shouldEnableDarkMode(context));
     }
 
 }

@@ -11,8 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -22,12 +22,28 @@ import org.pme.rssreader.R;
 import org.pme.rssreader.storage.model.Item;
 import org.pme.rssreader.view.item.ItemViewModel;
 
+/**
+ * View for selected item details.
+ * Also shown on dual-pane mode.
+ */
 public class ItemDetailsFragment extends Fragment {
 
     View view;
 
     public static ItemDetailsFragment newInstance() {
         return new ItemDetailsFragment();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        // Hide help button from top bar
+        menu.findItem(R.id.action_help).setVisible(false);
+        super.onPrepareOptionsMenu(menu);
     }
 
     @Override
@@ -41,23 +57,17 @@ public class ItemDetailsFragment extends Fragment {
 
         ItemViewModel itemViewModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class);
 
-        Log.e("ItemDetailsFragment/onCreateView", "START");
-
         // Observe selected item and update fields accordingly
         itemViewModel.getItemSelectedEvent().observe(getViewLifecycleOwner(), currentItem -> {
-            Log.e("ItemDetailsFragment/onCreateView", "OBSERVE");
             if (currentItem != null) {
                 populateUIElements(currentItem);
             }
         });
 
         return view;
-
     }
 
     private void populateUIElements(Item currentItem) {
-        Log.e("ItemDetailsFragment/populateUIElements", currentItem.getTitle());
-
         // Remove placeholder text
         view.findViewById(R.id.text_placeholder).setVisibility(View.INVISIBLE);
 
@@ -81,7 +91,6 @@ public class ItemDetailsFragment extends Fragment {
             i.setData(Uri.parse(currentItem.getLink()));
             startActivity(i);
         });
-
     }
 
 }

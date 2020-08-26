@@ -11,6 +11,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+/**
+ * XML feed item model.
+ */
 @Root(name = "item", strict = false)
 public class XmlItem {
     @Element

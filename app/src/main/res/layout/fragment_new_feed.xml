@@ -21,7 +21,7 @@
             android:id="@+id/text_input_new_feed_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Feed Name..." />
+            android:hint="@string/feed_name_hint" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -38,7 +38,7 @@
             android:id="@+id/text_input_new_feed_link"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:hint="Feed URL..." />
+            android:hint="@string/feed_url_hint" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -46,7 +46,7 @@
         android:id="@+id/btn_save_feed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SAVE"
+        android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -57,7 +57,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add a new feed..."
+        android:text="@string/add_a_new_feed"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

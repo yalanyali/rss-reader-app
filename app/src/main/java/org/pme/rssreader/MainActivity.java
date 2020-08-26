@@ -1,7 +1,9 @@
 package org.pme.rssreader;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -10,8 +12,13 @@ import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.google.android.material.navigation.NavigationView;
+
+import org.pme.rssreader.core.App;
 import org.pme.rssreader.view.item.list.ItemListFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,19 +28,35 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
 
+    private String helpDialogContent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Set status bar color according to dark mode
+        // Workaround for Theme.MaterialComponents.DayNight defaulting to primaryDark regardless of night mode.
+        if (App.shouldEnableDarkMode(getApplicationContext())) {
+            Window window = MainActivity.this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.statusBarDark));
+        }
+
+        // Init help dialog content text
+        resetHelpDialogContent();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_feed_list, R.id.nav_settings)
+                R.id.nav_feed_list, R.id.nav_settings, R.id.nav_about)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
@@ -63,10 +86,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_help) {
+            activateHelpOverlay();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
 
+    private void activateHelpOverlay() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.tips);
+        builder.setMessage(helpDialogContent);
+        builder.setCancelable(true);
+        builder.setPositiveButton(R.string.OK, (dialog, id) -> dialog.cancel());
+
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void setHelpDialogContent(String helpDialogContent) {
+        this.helpDialogContent = helpDialogContent;
+    }
+
+    public void resetHelpDialogContent() {
+        this.helpDialogContent = getString(R.string.help_dialog_content_list_view);
+    }
 }

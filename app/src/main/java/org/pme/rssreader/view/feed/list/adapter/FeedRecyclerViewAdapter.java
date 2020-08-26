@@ -1,7 +1,6 @@
 package org.pme.rssreader.view.feed.list.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,14 +62,13 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedRecyclerVi
             );
 
             holder.itemView.setOnLongClickListener(view -> {
-                Log.e("setOnLongClickListener", "falan");
                 itemDeleteCallback.itemDeleteRequest(current.getFeed());
                 return true;
             });
 
         } else {
-            holder.feedListItemNameTextView.setText("NO_NAME");
-            holder.feedListItemLinkTextView.setText("NO_LINK");
+            holder.feedListItemNameTextView.setText(R.string.NAME_PLACEHOLDER);
+            holder.feedListItemLinkTextView.setText(R.string.LINK_PLACEHOLDER);
         }
     }
 
@@ -86,10 +84,6 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedRecyclerVi
         this.feeds = feeds;
         notifyDataSetChanged();
     }
-
-//    public void refreshFeeds() {
-//        this.viewModel.refreshFeeds();
-//    }
 
     @Override
     public int getItemCount() {

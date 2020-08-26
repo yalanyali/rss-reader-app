@@ -11,13 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import org.pme.rssreader.R;
+import org.pme.rssreader.storage.FeedRepository;
 import org.pme.rssreader.view.item.ItemViewModel;
 import org.pme.rssreader.view.item.list.adapter.ItemRecyclerViewAdapter;
 
@@ -49,7 +49,6 @@ public class ItemListFragment extends Fragment {
 
         currentId = requireArguments().getInt(EXTRA_FEED_ID);
         currentTitle = requireArguments().getString("FEED_TITLE");
-        Log.e("ItemListFragment", String.valueOf(currentId));
     }
 
     @Override
@@ -74,19 +73,23 @@ public class ItemListFragment extends Fragment {
 
         itemViewModel.getAllItems().observe(getViewLifecycleOwner(), adapter::setItems);
 
-//        Log.e("TEST", itemViewModel.);
-
         // Swipe to refresh
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(() -> itemViewModel.refreshFeed(currentId, new FeedRepository.RefreshFeedCallback() {
             @Override
-            public void onRefresh() {
-                itemViewModel.refreshFeed(currentId);
+            public void onSuccess() {
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(requireActivity(), "Feed updated!",
+                Toast.makeText(requireActivity(), R.string.feed_updated,
                         Toast.LENGTH_LONG).show();
             }
-        });
+
+            @Override
+            public void onFailure() {
+                swipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(requireActivity(), R.string.error_while_updating_feed,
+                        Toast.LENGTH_LONG).show();
+            }
+        }));
 
         return view;
     }

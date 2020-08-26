@@ -3,16 +3,23 @@ package org.pme.rssreader.view.settings;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import me.philio.preferencecompatextended.PreferenceFragmentCompat;
 
 import org.pme.rssreader.R;
+import org.pme.rssreader.core.App;
 import org.pme.rssreader.core.Constants;
 import org.pme.rssreader.sync.AlarmUtils;
 
 
+/**
+ * Settings view using PreferenceFragment. Settings are in root_preferences.xml, stored in default shared preferences.
+ */
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
@@ -25,9 +32,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         Preference preference = findPreference(key);
         Log.e("SETTINGS", key);
         switch (key) {
+            case Constants.SETTING_AUTO_DARK_MODE_ENABLED:
             case Constants.SETTING_DARK_MODE_ENABLED:
-                int nightMode = sharedPreferences.getBoolean(key, false) ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO;
-                AppCompatDelegate.setDefaultNightMode(nightMode);
+                App.checkAndApplyDarkMode(requireContext());
                 break;
             case Constants.SETTING_SYNC_WITHIN_HOURS_ENABLED:
                 boolean syncWithinHoursEnabled = sharedPreferences.getBoolean(key, false);
@@ -60,6 +67,19 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         // Unregister the preference change listener
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        // Hide help button from top bar
+        menu.findItem(R.id.action_help).setVisible(false);
+        super.onPrepareOptionsMenu(menu);
     }
 
 }

@@ -37,9 +37,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/row_item_title"
             android:ellipsize="end"
-            android:lineHeight="30dp"
+            android:lineHeight="@dimen/row_item_content_line_height"
             android:singleLine="true"
-            android:text="Item Content, longer than title."
+            android:text="@string/item_content_placeholder"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,9 +52,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/row_item_title"
             android:layout_gravity="end"
-            android:text="3 hr. ago"
+            android:text="@string/hours_ago_placeholder"
             android:textAlignment="viewEnd"
-            android:textSize="10sp"
+            android:textSize="@dimen/row_item_date_text_size"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>

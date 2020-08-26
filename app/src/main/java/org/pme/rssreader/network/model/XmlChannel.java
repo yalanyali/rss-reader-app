@@ -6,6 +6,9 @@ import org.simpleframework.xml.Root;
 
 import java.util.List;
 
+/**
+ * XML feed channel model. A channel has a title, description and a list of items.
+ */
 @Root(strict = false)
 public class XmlChannel
 {

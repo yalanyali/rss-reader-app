@@ -9,18 +9,19 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 import java.util.Date;
 
+/**
+ * Item model for the database. A feed has one or more items.
+ */
 @Entity(indices = {@Index(value = {"guid"}, unique = true)})
-public class Item implements Serializable {
+public class Item {
 
     @PrimaryKey(autoGenerate = true)
     private int id;
 
     private int feedId;
 
-    @NonNull
     private String title;
 
-    @NonNull
     private String link;
 
     private Date pubDate;

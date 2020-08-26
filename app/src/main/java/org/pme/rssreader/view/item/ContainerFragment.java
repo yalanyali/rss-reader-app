@@ -1,7 +1,6 @@
 package org.pme.rssreader.view.item;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +15,9 @@ import org.pme.rssreader.R;
 import org.pme.rssreader.view.item.details.ItemDetailsFragment;
 import org.pme.rssreader.view.item.list.ItemListFragment;
 
+/**
+ * Fragment that orchestrates ItemListFragment and ItemDetailsFragment depending on device orientation.
+ */
 public class ContainerFragment extends Fragment {
 
     private Fragment itemListFragment;
@@ -31,7 +33,6 @@ public class ContainerFragment extends Fragment {
         View view = inflater.inflate(R.layout.item_fragment_layout, container, false);
 
         if (getArguments() == null) {
-            Log.e("ContainerFragment", "onCreateView/no arguments");
             return view;
         }
 
@@ -46,8 +47,6 @@ public class ContainerFragment extends Fragment {
     }
 
     private void inflateItemListContainer() {
-        Log.e("ContainerFragment", "inflateItemListContainer");
-
         FragmentManager fm = requireActivity().getSupportFragmentManager();
 
         Fragment fragment = fm.findFragmentByTag(ITEM_LIST_FRAGMENT_TAG);
@@ -69,8 +68,6 @@ public class ContainerFragment extends Fragment {
     }
 
     private void inflateItemDetailContainer() {
-        Log.e("ContainerFragment", "inflateItemDetailContainer");
-
         FragmentManager fm = requireActivity().getSupportFragmentManager();
 
         Fragment fragment = fm.findFragmentByTag(ITEM_DETAILS_FRAGMENT_TAG);

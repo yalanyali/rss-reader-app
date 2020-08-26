@@ -5,23 +5,22 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import java.io.Serializable;
 
+/**
+ * Feed model for the database.
+ */
 @Entity(indices = {
     @Index(value = { "link", "name" }, unique = true)
 })
-public class Feed implements Serializable {
+public class Feed {
 
     @PrimaryKey(autoGenerate = true)
     private int feedId;
 
-    @NonNull
     private String name;
 
-    @NonNull
     private String link;
 
-    @NonNull
     private long created;
 
     public Feed(@NonNull String name, @NonNull String link) {
@@ -61,11 +60,6 @@ public class Feed implements Serializable {
 
     public void setCreated(long created) {
         this.created = created;
-    }
-
-    @Override
-    public String toString() {
-        return "Feed: " + name + " " + link;
     }
 
 }

@@ -16,9 +16,13 @@ import org.pme.rssreader.storage.model.Item;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Room database class with a getter and a callback that gets called after opening the database.
+ */
 @Database(entities = {Feed.class, Item.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
+
     private static final String LOG_TAG_DB = "RoomDB";
 
     public abstract FeedDao feedDao();
@@ -46,19 +50,21 @@ public abstract class AppDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
+    /**
+     * Database gets populated with default feeds for test purposes.
+     * "Test Feed" will have a new item available each minute.
+     */
     private static RoomDatabase.Callback openCallback = new RoomDatabase.Callback() {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
-
             Log.i( LOG_TAG_DB, "onOpen() called" );
-
             databaseThreadExecutor.execute(() -> {
                 FeedDao dao = INSTANCE.feedDao();
-//                dao.deleteAll();
+                // dao.deleteAll();
                 Feed f = new Feed("FHE AI Schwarzes Brett", "https://www.ai.fh-erfurt.de/rss.schwarzesbrett");
                 dao.insert(f);
-                Feed f3 = new Feed("Spiegel Online", "https://www.spiegel.de/schlagzeilen/tops/index.rss\n");
+                Feed f3 = new Feed("Spiegel Online", "https://www.spiegel.de/schlagzeilen/tops/index.rss");
                 dao.insert(f3);
                 Feed f2 = new Feed("Test Feed", "https://lorem-rss.herokuapp.com/feed");
                 dao.insert(f2);

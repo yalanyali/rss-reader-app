@@ -3,10 +3,14 @@ package org.pme.rssreader.storage.model;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class FeedWithItems implements Serializable {
+
+/**
+ * Relationship model for Room database.
+ * Feed is a basic model but FeedWithItems has a list of items.
+ */
+public class FeedWithItems {
 
     @Embedded
     private Feed feed;

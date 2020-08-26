@@ -2,7 +2,6 @@ package org.pme.rssreader.view.feed.list;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,10 +83,6 @@ public class FeedListFragment extends Fragment implements FeedRecyclerViewAdapte
         }
 
         feedListViewModel.getItemSelectedEventObservable().observe(this, feed -> {
-            Log.w("SELECTED_FEED_ID", String.valueOf(feed.getFeedId()));
-//            Intent i = new Intent(requireContext(), ItemListActivity.class);
-//            i.putExtra(ItemListActivity.INTENT_EXTRA, feedId);
-//            startActivity(i);
             Bundle bundle = new Bundle();
             // Pass feed id
             bundle.putInt(ItemListFragment.EXTRA_FEED_ID, feed.getFeedId());
@@ -100,14 +95,11 @@ public class FeedListFragment extends Fragment implements FeedRecyclerViewAdapte
 
         // Swipe to refresh
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                feedListViewModel.refreshFeeds();
-                swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(requireActivity(), "Feeds updated!",
-                        Toast.LENGTH_LONG).show();
-            }
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            feedListViewModel.refreshFeeds();
+            swipeRefreshLayout.setRefreshing(false);
+            Toast.makeText(requireActivity(), R.string.updating_feeds,
+                    Toast.LENGTH_LONG).show();
         });
 
         // Fab button for new feed fragment
@@ -128,20 +120,17 @@ public class FeedListFragment extends Fragment implements FeedRecyclerViewAdapte
     public void itemDeleteRequest(Feed feed) {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
 
-        alertDialogBuilder.setMessage("Do you really want to delete this feed?")
-                .setTitle("Warning!");
+        alertDialogBuilder.setMessage(R.string.feed_delete_alert)
+                .setTitle(R.string.warning);
 
-        alertDialogBuilder.setPositiveButton("Yes",
+        alertDialogBuilder.setPositiveButton(R.string.yes,
                 (dialogInterface, i) -> {
-                    Log.e("DELETE", "DIYOR");
                     FeedRepository.getRepository(requireContext()).deleteFeed(feed);
-                    Toast.makeText(requireActivity(), "Feed deleted!",
+                    Toast.makeText(requireActivity(), R.string.feed_deleted,
                             Toast.LENGTH_LONG).show();
                 });
-        alertDialogBuilder.setNegativeButton("No",
-                (dialogInterface, i) -> {
-                    Log.e("DELETE", "DEMIYOR");
-                });
+        alertDialogBuilder.setNegativeButton(R.string.no,
+                (dialogInterface, i) -> {});
 
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();

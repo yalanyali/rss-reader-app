@@ -4,17 +4,17 @@
     <PreferenceCategory app:title="@string/theme_header" app:iconSpaceReserved="false">
 
         <SwitchPreferenceCompat
+            app:key="AUTO_DARK_MODE_ENABLED"
+            app:title="Auto Dark Mode"
+            app:summaryOn="@string/auto_dark_mode_summary"
+            android:disableDependentsState="true"
+            app:iconSpaceReserved="false" />
+
+        <SwitchPreferenceCompat
+            app:dependency="AUTO_DARK_MODE_ENABLED"
             app:key="DARK_MODE_ENABLED"
             app:title="@string/dark_mode_title"
             app:iconSpaceReserved="false" />
-
-<!--        <ListPreference-->
-<!--            app:defaultValue="Color 1"-->
-<!--            app:entries="@array/accent_entries"-->
-<!--            app:entryValues="@array/accent_values"-->
-<!--            app:key="colorAccent"-->
-<!--            app:title="@string/accent_color_title"-->
-<!--            app:iconSpaceReserved="false" />-->
 
     </PreferenceCategory>
     <PreferenceCategory app:title="@string/sync_header" app:iconSpaceReserved="false" app:allowDividerAbove="false">
@@ -41,15 +41,14 @@
         <SwitchPreferenceCompat
             app:dependency="SYNC_ENABLED"
             app:key="SYNC_WITHIN_HOURS_ENABLED"
-            app:title="Sync only between specific times"
+            app:title="@string/sync_enabled_title"
             app:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             app:dependency="SYNC_WITHIN_HOURS_ENABLED"
             app:key="SYNC_WITHIN_HOURS_BUT_DONT_NOTIFY"
             app:title="Only mute notifications"
-            app:summaryOff="Feeds will not get updated outside of selected time period."
-            app:summaryOn="Feeds will still get updated outside of selected time period."
+            app:summaryOn="@string/sync_within_hours_summary_on"
             app:iconSpaceReserved="false" />
 
         <TimePickerPreference

@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
-import android.util.Log;
-
 import androidx.preference.PreferenceManager;
 
 import org.pme.rssreader.core.Constants;
@@ -37,13 +35,12 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
 
     private boolean conditionsPassed(Context context) {
-        Log.e("AlarmReceiver/conditionsPassed", "START");
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
 
         boolean onlyWithinHours = sp.getBoolean(Constants.SETTING_SYNC_WITHIN_HOURS_ENABLED, false);
         boolean syncButDontNotify = sp.getBoolean(Constants.SYNC_WITHIN_HOURS_BUT_DONT_NOTIFY, false);
 
-        if (!onlyWithinHours) { Log.e("AlarmReceiver", "!onlyWithinHours"); return true; }
+        if (!onlyWithinHours) { return true; }
 
         if (syncButDontNotify) { return true; }
 

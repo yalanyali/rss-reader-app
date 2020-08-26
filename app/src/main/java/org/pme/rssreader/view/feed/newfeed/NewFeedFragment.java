@@ -2,20 +2,34 @@ package org.pme.rssreader.view.feed.newfeed;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.snackbar.Snackbar;
+
+import org.pme.rssreader.MainActivity;
 import org.pme.rssreader.R;
+import org.pme.rssreader.network.NetworkApi;
+import org.pme.rssreader.network.NetworkController;
+import org.pme.rssreader.network.model.XmlFeed;
 import org.pme.rssreader.storage.FeedRepository;
 import org.pme.rssreader.storage.model.Feed;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+/**
+ * View to add a new feed
+ */
 public class NewFeedFragment extends Fragment {
 
     private static final String LOG_TAG = "NewFeedActivity";
@@ -34,6 +48,8 @@ public class NewFeedFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Set help dialog text
+        ((MainActivity) requireActivity()).setHelpDialogContent(getString(R.string.help_dialog_content_new_feed));
     }
 
     @Override
@@ -56,12 +72,15 @@ public class NewFeedFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        ((MainActivity) requireActivity()).resetHelpDialogContent();
+    }
+
     private View.OnClickListener buttonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-
-            Log.i( LOG_TAG, "Button tapped");
-
             // Check which button was clicked
             if( v.getId() == R.id.btn_save_feed)
             {
@@ -75,18 +94,35 @@ public class NewFeedFragment extends Fragment {
     }
 
     private void saveNewFeed() {
+        // No empty fields
         if (nameText.getText().toString().equals("") || linkText.getText().toString().equals("")) {
-            showSnackbar("Fill");
+            showSnackbar(getString(R.string.fill_in_fields));
             return;
         }
-        Feed f = new Feed(nameText.getText().toString(), linkText.getText().toString());
-        feedRepository.insert(f);
-        Log.i(LOG_TAG, "FEED SAVED");
-        showSnackbar("Feed saved!");
 
-        // Wait for snackbar feedback
-        (new Handler()).postDelayed(this::goBack, 1500);
+        // Validate url
+        String url = linkText.getText().toString();
+        if (!Patterns.WEB_URL.matcher(url).matches()) {
+            showSnackbar(getString(R.string.invalid_url));
+            return;
+        }
 
+        // Validate XML
+        validateXML(url, new ValidationCallback() {
+            @Override
+            public void onSuccess() {
+                Feed f = new Feed(nameText.getText().toString(), linkText.getText().toString());
+                feedRepository.insert(f);
+                showSnackbar(getString(R.string.feed_saved));
+                // Wait for snackbar feedback
+                (new Handler()).postDelayed(NewFeedFragment.this::goBack, 1500);
+            }
+
+            @Override
+            public void onFailure() {
+                showSnackbar(getString(R.string.feed_not_available));
+            }
+        });
     }
 
     private void showSnackbar(String text) {
@@ -96,5 +132,39 @@ public class NewFeedFragment extends Fragment {
         snackbar.show();
     }
 
+    private interface ValidationCallback {
+        void onSuccess();
+        void onFailure();
+    }
+
+    /**
+     * Validates XML by trying to parse it
+     */
+    private void validateXML(String url, ValidationCallback validationCallback) {
+        try {
+            NetworkApi api = NetworkController.getApi();
+            api.getFeed(url).enqueue(new Callback<XmlFeed>() {
+                @Override
+                public void onResponse(@NonNull Call<XmlFeed> call, @NonNull Response<XmlFeed> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body() != null) {
+                            if (response.body().channel.item.size() > 0) {
+                                validationCallback.onSuccess();
+                                return;
+                            }
+                        }
+                    }
+                    validationCallback.onFailure();
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<XmlFeed> call, @NonNull Throwable t) {
+                    validationCallback.onFailure();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }

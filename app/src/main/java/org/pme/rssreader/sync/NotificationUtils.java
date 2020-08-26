@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
-import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
@@ -30,7 +29,6 @@ public class NotificationUtils {
     private static final String CHANNEL_NAME = "RSS Reader";
 
     public static void createNotificationForNewItems(Context context, List<Item> items) {
-        Log.e("createNotificationForNewItems", String.valueOf(items.size()));
 
         if (!conditionsPassed(context)) { return; }
 
@@ -52,7 +50,6 @@ public class NotificationUtils {
 
             // Intent for when the user taps on the notification
             int feedId = items.get(0).getFeedId(); // FeedId gets passed to MainActivity as extra
-            Log.e("createNotificationForNewItems feedId ", String.valueOf(feedId));
             Intent intent = new Intent(context, MainActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             intent.putExtra(MainActivity.INTENT_EXTRA_NAVIGATE_TO_FEED_ID, feedId);
@@ -91,9 +88,7 @@ public class NotificationUtils {
     }
 
     public static boolean conditionsPassed(Context context) {
-
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
-
         boolean syncButDontNotify = sp.getBoolean(Constants.SYNC_WITHIN_HOURS_BUT_DONT_NOTIFY, false);
 
         if (syncButDontNotify || runningInForeground()) { return false; }

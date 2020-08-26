@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Visit website"
+        android:text="@string/visit_website"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/item_view_detail_content" />
 
@@ -21,7 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="3 hours ago"
+        android:text="@string/hours_ago_placeholder"
         android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/item_view_detail_title" />
@@ -32,7 +32,7 @@
         android:layout_height="350dp"
         android:layout_marginTop="10dp"
         android:scrollbars="vertical"
-        android:text="Item content.. Long.."
+        android:text="@string/item_content_placeholder"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/item_view_detail_date" />
@@ -42,7 +42,7 @@
         android:id="@+id/item_view_detail_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Item Title"
+        android:text="@string/item_title_placeholder"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,7 +52,7 @@
         android:id="@+id/text_placeholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Choose an article to see the details..."
+        android:text="@string/choose_an_article_to_see_the_details"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
