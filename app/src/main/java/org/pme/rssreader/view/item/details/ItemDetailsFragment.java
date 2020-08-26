@@ -10,7 +10,6 @@ import androidx.core.text.HtmlCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -22,6 +21,10 @@ import org.pme.rssreader.R;
 import org.pme.rssreader.storage.model.Item;
 import org.pme.rssreader.view.item.ItemViewModel;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * View for selected item details.
  * Also shown on dual-pane mode.
@@ -29,6 +32,7 @@ import org.pme.rssreader.view.item.ItemViewModel;
 public class ItemDetailsFragment extends Fragment {
 
     View view;
+    ItemViewModel viewModel;
 
     public static ItemDetailsFragment newInstance() {
         return new ItemDetailsFragment();
@@ -55,10 +59,10 @@ public class ItemDetailsFragment extends Fragment {
 
         view = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        ItemViewModel itemViewModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ItemViewModel.class);
 
         // Observe selected item and update fields accordingly
-        itemViewModel.getItemSelectedEvent().observe(getViewLifecycleOwner(), currentItem -> {
+        viewModel.getItemSelectedEvent().observe(getViewLifecycleOwner(), currentItem -> {
             if (currentItem != null) {
                 populateUIElements(currentItem);
             }
@@ -68,8 +72,6 @@ public class ItemDetailsFragment extends Fragment {
     }
 
     private void populateUIElements(Item currentItem) {
-        // Remove placeholder text
-        view.findViewById(R.id.text_placeholder).setVisibility(View.INVISIBLE);
 
         TextView title = view.findViewById(R.id.item_view_detail_title);
         TextView content = view.findViewById(R.id.item_view_detail_content);
@@ -77,14 +79,26 @@ public class ItemDetailsFragment extends Fragment {
         Button button = view.findViewById(R.id.item_view_detail_button);
 
         title.setText(currentItem.getTitle());
+
+        // Publish date of the item
+        Date pubDate = currentItem.getPubDate();
+
+        // Show relative date (e.g. 3 hours ago) and full date together
+        // unless it is so old, that the relative date is almost a full date.
+        String dateText;
+        SimpleDateFormat df = new SimpleDateFormat("dd.MM.YYY HH:mm", Locale.getDefault());
+        if (viewModel.getRelativeDateString(pubDate).contains("ago")) {
+            dateText = String.format("%s (%s)", df.format(pubDate), viewModel.getRelativeDateString(pubDate));
+        } else {
+            dateText = df.format(pubDate);
+        }
+        date.setText(dateText);
+
         if (currentItem.getContent() != null) {
             content.setText(HtmlCompat.fromHtml(currentItem.getContent(), HtmlCompat.FROM_HTML_MODE_LEGACY));
         } else {
             content.setText(HtmlCompat.fromHtml(currentItem.getDescription(), HtmlCompat.FROM_HTML_MODE_LEGACY));
         }
-        // To enable scrolling and clickable links
-        content.setMovementMethod(LinkMovementMethod.getInstance());
-        date.setText(currentItem.getPubDate().toString());
 
         button.setOnClickListener(v -> {
             Intent i = new Intent(Intent.ACTION_VIEW);

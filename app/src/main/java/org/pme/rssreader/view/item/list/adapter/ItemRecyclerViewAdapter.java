@@ -76,9 +76,7 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             }
 
             Date pubDate = current.getPubDate();
-            Date currentDate = new Date();
-            String relativeTimeSpanString = (String) DateUtils.getRelativeTimeSpanString(pubDate.getTime(), currentDate.getTime(), DateUtils.SECOND_IN_MILLIS);
-            holder.date.setText(relativeTimeSpanString);
+            holder.date.setText(viewModel.getRelativeDateString(pubDate));
 
             holder.itemView.setOnClickListener(view -> {
                 viewModel.setItemSelected(current);
@@ -93,6 +91,10 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
         }
     }
 
+    @Override
+    public int getItemCount() {
+        return this.items != null ? this.items.size() : 0;
+    }
 
     public void setItems(List<Item> items) {
         this.items = items;
@@ -101,11 +103,6 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             viewModel.setItemSelected(items.get(0));
         }
         notifyDataSetChanged();
-    }
-
-    @Override
-    public int getItemCount() {
-        return this.items != null ? this.items.size() : 0;
     }
 
     /**
