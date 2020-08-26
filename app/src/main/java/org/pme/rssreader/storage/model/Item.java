@@ -2,17 +2,26 @@ package org.pme.rssreader.storage.model;
 
 import androidx.annotation.NonNull;
 import androidx.room.Entity;
+import androidx.room.ForeignKey;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Item model for the database. A feed has one or more items.
  */
-@Entity(indices = {@Index(value = {"guid"}, unique = true)})
+@Entity(
+        indices = { @Index(value = {"guid"}, unique = true) },
+        foreignKeys = @ForeignKey(
+                onDelete = ForeignKey.CASCADE,
+                entity = Feed.class,
+                parentColumns = "feedId",
+                childColumns = "feedId"
+        )
+
+    )
 public class Item {
 
     @PrimaryKey(autoGenerate = true)
@@ -88,6 +97,7 @@ public class Item {
         this.description = description;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Item: " + title + " " + link;

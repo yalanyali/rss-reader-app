@@ -9,7 +9,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -22,6 +24,7 @@ import org.pme.rssreader.R;
 import org.pme.rssreader.storage.FeedRepository;
 import org.pme.rssreader.storage.model.Feed;
 import org.pme.rssreader.view.feed.list.adapter.FeedRecyclerViewAdapter;
+import org.pme.rssreader.view.feed.newfeed.NewFeedFragment;
 import org.pme.rssreader.view.item.list.ItemListFragment;
 
 /**
@@ -102,11 +105,11 @@ public class FeedListFragment extends Fragment implements FeedRecyclerViewAdapte
                     Toast.LENGTH_LONG).show();
         });
 
-        // Fab button for new feed fragment
+        // Fab button for new feed dialog
         FloatingActionButton fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(_view -> {
-            NavHostFragment.findNavController(this)
-                .navigate(R.id.action_nav_feed_list_to_newFeedFragment);
+            DialogFragment dialogFragment = new NewFeedFragment();
+            dialogFragment.show(getParentFragmentManager(), NewFeedFragment.FRAGMENT_TAG);
         });
 
         return view;

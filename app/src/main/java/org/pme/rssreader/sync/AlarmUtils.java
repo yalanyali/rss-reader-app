@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import org.pme.rssreader.core.Constants;
 
@@ -43,6 +44,7 @@ public class AlarmUtils {
     }
 
     public static void updateAlarmUsingSharedPrefs(Context context, SharedPreferences sp) {
+        Log.i("ALARM", "SET");
         boolean syncEnabled = sp.getBoolean(Constants.SETTING_SYNC_ENABLED, false);
         if (!syncEnabled) {
             cancelAlarm(context);

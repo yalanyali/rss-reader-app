@@ -89,6 +89,7 @@ public class FeedRepository {
             NetworkApi api = NetworkController.getApi();
 
             for (FeedWithItems currentFeed : this.feedDao.getFeeds()) {
+                Log.i("FeedRepository/refreshFeedsInBackground", String.format("Background request on %s", currentFeed.getFeed().getLink()));
                 api.getFeed(currentFeed.getFeed().getLink()).enqueue(new Callback<XmlFeed>() {
                     @Override
                     public void onResponse(@NonNull Call<XmlFeed> call, @NonNull Response<XmlFeed> response) {
@@ -144,30 +145,28 @@ public class FeedRepository {
             return;
         }
 
-        this.allFeedsObservable.observe((LifecycleOwner) context, feeds -> {
-            for (FeedWithItems feed : this.allFeedsObservable.getValue()) {
-                api.getFeed(feed.getFeed().getLink()).enqueue(new Callback<XmlFeed>() {
-                    @Override
-                    public void onResponse(@NonNull Call<XmlFeed> call, @NonNull Response<XmlFeed> response) {
-                        Log.i(LOG_TAG_NETWORK, String.format("Request successful on URL: %s", feed.getFeed().getLink()));
-                        if (response.isSuccessful()) {
-                            List<Item> newItems = new ArrayList<>();
-                            if (response.body() != null) {
-                                for (XmlItem xmlItem : response.body().channel.item) {
-                                    newItems.add(xmlItem.toItem());
-                                }
+        for (FeedWithItems feed : this.allFeedsObservable.getValue()) {
+            api.getFeed(feed.getFeed().getLink()).enqueue(new Callback<XmlFeed>() {
+                @Override
+                public void onResponse(@NonNull Call<XmlFeed> call, @NonNull Response<XmlFeed> response) {
+                    Log.i(LOG_TAG_NETWORK, String.format("Request successful on URL: %s", feed.getFeed().getLink()));
+                    if (response.isSuccessful()) {
+                        List<Item> newItems = new ArrayList<>();
+                        if (response.body() != null) {
+                            for (XmlItem xmlItem : response.body().channel.item) {
+                                newItems.add(xmlItem.toItem());
                             }
-                            insertItemsForFeed(feed.getFeed(), newItems);
                         }
+                        insertItemsForFeed(feed.getFeed(), newItems);
                     }
+                }
 
-                    @Override
-                    public void onFailure(@NonNull Call<XmlFeed> call, @NonNull Throwable t) {
-                        Log.e(LOG_TAG_NETWORK, String.format("Error on URL: %s", feed.getFeed().getLink()));
-                    }
-                });
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<XmlFeed> call, @NonNull Throwable t) {
+                    Log.e(LOG_TAG_NETWORK, String.format("Error on URL: %s", feed.getFeed().getLink()));
+                }
+            });
+        }
     }
 
 

@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.WindowManager;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
@@ -29,16 +30,32 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Preference preference = findPreference(key);
         switch (key) {
             case Constants.SETTING_AUTO_DARK_MODE_ENABLED:
             case Constants.SETTING_DARK_MODE_ENABLED:
                 App.checkAndApplyDarkMode(requireContext());
                 break;
             case Constants.SETTING_SYNC_INTERVAL:
+                checkAndWarnUser(sharedPreferences);
             case Constants.SETTING_SYNC_ENABLED:
                 AlarmUtils.updateAlarmUsingSharedPrefs(requireContext(), sharedPreferences);
                 break;
+        }
+    }
+
+    private void checkAndWarnUser(SharedPreferences sharedPreferences) {
+        Log.i("SettingsFragment/checkAndWarnUser", "WARNING");
+        String intervalString = sharedPreferences.getString(Constants.SETTING_SYNC_INTERVAL, "30");
+        int interval = Integer.parseInt(intervalString);
+        if (interval < 10) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setTitle(R.string.warning);
+            builder.setMessage(R.string.small_interval_warning);
+            builder.setCancelable(true);
+            builder.setPositiveButton(R.string.OK, (dialog, id) -> dialog.cancel());
+
+            AlertDialog alert = builder.create();
+            alert.show();
         }
     }
 

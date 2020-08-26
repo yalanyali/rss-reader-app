@@ -38,7 +38,11 @@ public abstract class FeedDao {
     @Query("SELECT * FROM Feed")
     public abstract List<FeedWithItems> getFeeds();
 
-    // Minimal feed, without items
+    /**
+     * Minimal feed, without items
+     * @param feedId ID of the feed
+     * @return Feed without items
+     */
     @Query("SELECT * FROM Feed WHERE feedId = :feedId")
     public abstract Feed getFeedById(int feedId);
 

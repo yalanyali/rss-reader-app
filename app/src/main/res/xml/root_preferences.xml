@@ -47,7 +47,7 @@
         <SwitchPreferenceCompat
             app:dependency="SYNC_WITHIN_HOURS_ENABLED"
             app:key="SYNC_WITHIN_HOURS_BUT_DONT_NOTIFY"
-            app:title="Only mute notifications"
+            app:title="@string/mute_only"
             app:summaryOn="@string/sync_within_hours_summary_on"
             app:iconSpaceReserved="false" />
 

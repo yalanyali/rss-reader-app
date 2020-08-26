@@ -33,8 +33,6 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
 
-    private String helpDialogContent;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,9 +46,6 @@ public class MainActivity extends AppCompatActivity {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.statusBarDark));
         }
-
-        // Init help dialog content text
-        resetHelpDialogContent();
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -106,17 +101,10 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-//    /**
-//     * Returns true if the app was opened by the user and not automatically
-//     */
-//    private boolean shouldDoInitialUpdate() {
-//        return !Objects.equals(getIntent().getAction(), Constants.ALARM_RECEIVER_ACTION);
-//    }
-
     private void activateHelpOverlay() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.tips);
-        builder.setMessage(helpDialogContent);
+        builder.setMessage(R.string.help_dialog_content_list_view);
         builder.setCancelable(true);
         builder.setPositiveButton(R.string.OK, (dialog, id) -> dialog.cancel());
 
@@ -124,11 +112,4 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
     }
 
-    public void setHelpDialogContent(String helpDialogContent) {
-        this.helpDialogContent = helpDialogContent;
-    }
-
-    public void resetHelpDialogContent() {
-        this.helpDialogContent = getString(R.string.help_dialog_content_list_view);
-    }
 }

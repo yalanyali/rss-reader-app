@@ -1,17 +1,19 @@
 package org.pme.rssreader.view.feed.newfeed;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Patterns;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.snackbar.Snackbar;
 
@@ -30,9 +32,10 @@ import retrofit2.Response;
 /**
  * View to add a new feed
  */
-public class NewFeedFragment extends Fragment {
+public class NewFeedFragment extends DialogFragment {
 
-    private static final String LOG_TAG = "NewFeedActivity";
+    public static final String FRAGMENT_TAG = "DIALOG_FRAGMENT";
+
     private EditText nameText;
     private EditText linkText;
 
@@ -40,27 +43,16 @@ public class NewFeedFragment extends Fragment {
 
     FeedRepository feedRepository;
 
+    @SuppressLint("InflateParams")
+    @NonNull
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
+    public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // Set help dialog text
-        ((MainActivity) requireActivity()).setHelpDialogContent(getString(R.string.help_dialog_content_new_feed));
-    }
+        // Get the layout inflater
+        LayoutInflater inflater = requireActivity().getLayoutInflater();
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.fragment_new_feed, container, false);
-
-        // Link Button with Click Listener
-        Button saveFeed = view.findViewById(R.id.btn_save_feed);
-        saveFeed.setOnClickListener(this.buttonClickListener);
+        view = inflater.inflate(R.layout.fragment_new_feed, null);
 
         // Text
         nameText = view.findViewById(R.id.text_input_new_feed_name);
@@ -69,28 +61,22 @@ public class NewFeedFragment extends Fragment {
         // Repo
         feedRepository = FeedRepository.getRepository(requireContext());
 
-        return view;
-    }
+        // Inflate and set the layout for the dialog
+        // Pass null as the parent view because it's going into the dialog layout
+        builder.setView(view)
+            .setTitle(R.string.add_a_new_feed)
+            .setPositiveButton(R.string.save, null)
+            .setNegativeButton(R.string.cancel, null);
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ((MainActivity) requireActivity()).resetHelpDialogContent();
-    }
+        AlertDialog dialog = builder.create();
 
-    private View.OnClickListener buttonClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            // Check which button was clicked
-            if( v.getId() == R.id.btn_save_feed)
-            {
-                saveNewFeed();
-            }
-        }
-    };
+        // Positive button listener
+        dialog.setOnShowListener(dialogInterface -> {
+            Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setOnClickListener(view -> saveNewFeed());
+        });
 
-    private void goBack() {
-        requireActivity().onBackPressed();
+        return dialog;
     }
 
     private void saveNewFeed() {
@@ -107,15 +93,25 @@ public class NewFeedFragment extends Fragment {
             return;
         }
 
+        // Try HTTPS for HTTP URLs, since we don't support insecure requests
+        url = url.replace("http://", "https://");
+
+        // Add https if needed
+        if (!url.startsWith("https://")) {
+            url = String.format("https://%s", url);
+        }
+
+        String finalUrl = url;
+
         // Validate XML
-        validateXML(url, new ValidationCallback() {
+        validateXML(finalUrl, new ValidationCallback() {
             @Override
             public void onSuccess() {
-                Feed f = new Feed(nameText.getText().toString(), linkText.getText().toString());
+                Feed f = new Feed(nameText.getText().toString(), finalUrl);
                 feedRepository.insert(f);
                 showSnackbar(getString(R.string.feed_saved));
                 // Wait for snackbar feedback
-                (new Handler()).postDelayed(NewFeedFragment.this::goBack, 1500);
+                (new Handler()).postDelayed(NewFeedFragment.this::dismiss, 1500);
             }
 
             @Override
@@ -126,11 +122,12 @@ public class NewFeedFragment extends Fragment {
     }
 
     private void showSnackbar(String text) {
-        Snackbar snackbar = Snackbar.make(requireActivity().findViewById(android.R.id.content),
+        Snackbar snackbar = Snackbar.make(view,
                 text,
-                Snackbar.LENGTH_LONG);
+                Snackbar.LENGTH_SHORT);
         snackbar.show();
     }
+
 
     private interface ValidationCallback {
         void onSuccess();

@@ -58,7 +58,7 @@
     <string name="feed_name_hint">Feed Name…</string>
     <string name="feed_url_hint">Feed URL…</string>
     <string name="save">Save</string>
-    <string name="add_a_new_feed">Add a new feed…</string>
+    <string name="add_a_new_feed">Add a new feed:</string>
     <string name="pme_sose_2020">PME SoSe 2020</string>
     <string name="feed_list_title">Feed List</string>
     <string name="settings_title">Settings</string>
@@ -68,7 +68,9 @@
     <string name="andy_schleising">Andy Schleising</string>
     <string name="wassem_alaashor">Wassem Alaashor</string>
     <string name="mustapha_lahmidi">Mustapha Lahmidi</string>
-
+    <string name="cancel">Cancel</string>
+    <string name="mute_only">Mute only</string>
+    <string name="small_interval_warning">This option exists only for testing purposes.\n\nAndroid restricts background activities with intervals less than 10 minutes.\n\nIf the device\'s screen is off, the feeds will only be able to get updated every 10 minutes.</string>
 
 
 </resources>
