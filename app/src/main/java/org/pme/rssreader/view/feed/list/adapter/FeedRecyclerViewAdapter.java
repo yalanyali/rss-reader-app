@@ -57,9 +57,13 @@ public class FeedRecyclerViewAdapter extends RecyclerView.Adapter<FeedRecyclerVi
             holder.feedListItemLinkTextView.setText(current.getFeed().getLink());
             holder.feedListItemNameTextView.setText(current.getFeed().getName());
 
-            holder.itemView.setOnClickListener(view ->
-                viewModel.setItemSelected(current.getFeed())
-            );
+            holder.itemView.setOnClickListener(view -> {
+                viewModel.setItemSelected(current.getFeed());
+                // Feeds get updated automatically if the user has enabled the option.
+                // The user can manually update the feed with a swipe-down.
+                // We also want to update feeds just in case, so we do it when the user clicks on a feed.
+                viewModel.refreshFeed(current.getFeed().getFeedId());
+            });
 
             holder.itemView.setOnLongClickListener(view -> {
                 itemDeleteCallback.itemDeleteRequest(current.getFeed());

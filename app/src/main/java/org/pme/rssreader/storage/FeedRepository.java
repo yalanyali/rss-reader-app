@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
 import org.pme.rssreader.network.NetworkApi;
@@ -42,7 +43,6 @@ public class FeedRepository {
         if (INSTANCE == null) {
             synchronized (FeedRepository.class) {
                 INSTANCE = new FeedRepository(context);
-                Log.w("REPO INSTANCE:", "");
             }
         }
         return INSTANCE;
@@ -67,16 +67,12 @@ public class FeedRepository {
     public void insert(Feed feed) {
         AppDatabase.databaseThreadExecutor.execute(() -> {
             feed.setCreated(System.currentTimeMillis());
-            Log.i("RoomDB", "Saving: " + feed.toString());
             feedDao.insert(feed);
         });
     }
 
     public void deleteFeed(Feed feed) {
-        AppDatabase.databaseThreadExecutor.execute(() -> {
-            Log.i("RoomDB", "Deleting: " + feed.toString());
-            feedDao.delete(feed);
-        });
+        AppDatabase.databaseThreadExecutor.execute(() -> feedDao.delete(feed));
     }
 
     /**
@@ -97,9 +93,6 @@ public class FeedRepository {
                     @Override
                     public void onResponse(@NonNull Call<XmlFeed> call, @NonNull Response<XmlFeed> response) {
                         if (response.isSuccessful()) {
-                            Log.w(LOG_TAG_NETWORK, "Network call: success.");
-                            Log.w("FEED", String.valueOf(currentFeed.getFeed().getFeedId()));
-
                             List<Item> newItems = new ArrayList<>();
 
                             if (response.body() != null) {
@@ -151,27 +144,30 @@ public class FeedRepository {
             return;
         }
 
-        for (FeedWithItems feed : this.allFeedsObservable.getValue()) {
-            api.getFeed(feed.getFeed().getLink()).enqueue(new Callback<XmlFeed>() {
-                @Override
-                public void onResponse(@NonNull Call<XmlFeed> call, @NonNull Response<XmlFeed> response) {
-                    if (response.isSuccessful()) {
-                        List<Item> newItems = new ArrayList<>();
-                        if (response.body() != null) {
-                            for (XmlItem xmlItem : response.body().channel.item) {
-                                newItems.add(xmlItem.toItem());
+        this.allFeedsObservable.observe((LifecycleOwner) context, feeds -> {
+            for (FeedWithItems feed : this.allFeedsObservable.getValue()) {
+                api.getFeed(feed.getFeed().getLink()).enqueue(new Callback<XmlFeed>() {
+                    @Override
+                    public void onResponse(@NonNull Call<XmlFeed> call, @NonNull Response<XmlFeed> response) {
+                        Log.i(LOG_TAG_NETWORK, String.format("Request successful on URL: %s", feed.getFeed().getLink()));
+                        if (response.isSuccessful()) {
+                            List<Item> newItems = new ArrayList<>();
+                            if (response.body() != null) {
+                                for (XmlItem xmlItem : response.body().channel.item) {
+                                    newItems.add(xmlItem.toItem());
+                                }
                             }
+                            insertItemsForFeed(feed.getFeed(), newItems);
                         }
-                        insertItemsForFeed(feed.getFeed(), newItems);
                     }
-                }
 
-                @Override
-                public void onFailure(@NonNull Call<XmlFeed> call, @NonNull Throwable t) {
-                    Log.e(LOG_TAG_NETWORK, String.format("Error on URL: %s", feed.getFeed().getLink()));
-                }
-            });
-        }
+                    @Override
+                    public void onFailure(@NonNull Call<XmlFeed> call, @NonNull Throwable t) {
+                        Log.e(LOG_TAG_NETWORK, String.format("Error on URL: %s", feed.getFeed().getLink()));
+                    }
+                });
+            }
+        });
     }
 
 
@@ -192,7 +188,7 @@ public class FeedRepository {
                 @Override
                 public void onResponse(@NonNull Call<XmlFeed> call, @NonNull Response<XmlFeed> response) {
                     if (response.isSuccessful()) {
-                        Log.w(LOG_TAG_NETWORK, "Network call: success.");
+                        Log.i(LOG_TAG_NETWORK, String.format("Network call success on URL: %s", feed.getLink()));
                         List<Item> newItems = new ArrayList<>();
                         if (response.body() != null) {
                             for (XmlItem xmlItem : response.body().channel.item) {
@@ -214,11 +210,38 @@ public class FeedRepository {
         });
     }
 
+    public void refreshFeed(int feedId) {
+        AppDatabase.databaseThreadExecutor.execute(() -> {
+            Feed feed = feedDao.getFeedById(feedId);
+            if (feed == null) {
+                return;
+            }
+            NetworkApi api = NetworkController.getApi();
+            api.getFeed(feed.getLink()).enqueue(new Callback<XmlFeed>() {
+                @Override
+                public void onResponse(@NonNull Call<XmlFeed> call, @NonNull Response<XmlFeed> response) {
+                    if (response.isSuccessful()) {
+                        Log.i(LOG_TAG_NETWORK, String.format("Network call success on URL: %s", feed.getLink()));
+                        List<Item> newItems = new ArrayList<>();
+                        if (response.body() != null) {
+                            for (XmlItem xmlItem : response.body().channel.item) {
+                                newItems.add(xmlItem.toItem());
+                            }
+                        }
+                        insertItemsForFeed(feed, newItems);
+                    }
+                }
+                @Override
+                public void onFailure(@NonNull Call<XmlFeed> call, @NonNull Throwable t) {
+                    Log.e(LOG_TAG_NETWORK, String.format("Error on URL: %s", feed.getLink()));
+                }
+            });
+        });
+    }
+
     public void insertItemsForFeed(Feed feed, List<Item> items) {
         if (items.size() == 0) { return; }
-        AppDatabase.databaseThreadExecutor.execute(() -> {
-            feedDao.insertItemsForFeed(feed, items);
-        });
+        AppDatabase.databaseThreadExecutor.execute(() -> feedDao.insertItemsForFeed(feed, items));
     }
 
 }

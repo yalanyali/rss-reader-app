@@ -30,21 +30,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         Preference preference = findPreference(key);
-        Log.e("SETTINGS", key);
         switch (key) {
             case Constants.SETTING_AUTO_DARK_MODE_ENABLED:
             case Constants.SETTING_DARK_MODE_ENABLED:
                 App.checkAndApplyDarkMode(requireContext());
-                break;
-            case Constants.SETTING_SYNC_WITHIN_HOURS_ENABLED:
-                boolean syncWithinHoursEnabled = sharedPreferences.getBoolean(key, false);
-                Log.e("syncWithinHoursEnabled", String.valueOf(syncWithinHoursEnabled));
-                break;
-            case Constants.SETTING_SYNC_TIME_START_SECONDS:
-                Log.e("SETTING_SYNC_TIME_START_SECONDS", String.valueOf(sharedPreferences.getInt(key, -1)));
-                break;
-            case Constants.SETTING_SYNC_TIME_END_SECONDS:
-                Log.e("SETTING_SYNC_TIME_END_SECONDS", String.valueOf(sharedPreferences.getInt(key, -1)));
                 break;
             case Constants.SETTING_SYNC_INTERVAL:
             case Constants.SETTING_SYNC_ENABLED:

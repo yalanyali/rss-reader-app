@@ -11,5 +11,5 @@ import retrofit2.http.Url;
  */
 public interface NetworkApi {
     @GET
-    public Call<XmlFeed> getFeed(@Url String url);
+    Call<XmlFeed> getFeed(@Url String url);
 }

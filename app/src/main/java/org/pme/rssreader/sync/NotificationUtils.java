@@ -13,6 +13,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
 
 import org.pme.rssreader.R;
+import org.pme.rssreader.core.App;
 import org.pme.rssreader.core.Constants;
 import org.pme.rssreader.storage.model.Item;
 import org.pme.rssreader.MainActivity;
@@ -81,17 +82,12 @@ public class NotificationUtils {
         }
     }
 
-    public static boolean runningInForeground() {
-        ActivityManager.RunningAppProcessInfo appProcessInfo = new ActivityManager.RunningAppProcessInfo();
-        ActivityManager.getMyMemoryState(appProcessInfo);
-        return (appProcessInfo.importance == IMPORTANCE_FOREGROUND || appProcessInfo.importance == IMPORTANCE_VISIBLE);
-    }
-
     public static boolean conditionsPassed(Context context) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(context);
         boolean syncButDontNotify = sp.getBoolean(Constants.SYNC_WITHIN_HOURS_BUT_DONT_NOTIFY, false);
 
-        if (syncButDontNotify || runningInForeground()) { return false; }
+        //noinspection RedundantIfStatement
+        if (syncButDontNotify || App.runningInForeground()) { return false; }
 
         return true;
     }

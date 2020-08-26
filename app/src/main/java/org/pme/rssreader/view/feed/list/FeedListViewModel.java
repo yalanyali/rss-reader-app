@@ -38,6 +38,10 @@ public class FeedListViewModel extends AndroidViewModel {
         this.feedRepository.refreshAllFeeds();
     }
 
+    public void refreshFeed(int feedId) {
+        this.feedRepository.refreshFeed(feedId);
+    }
+
     public void setItemSelected(Feed selectedFeed) {
         this.selectedFeedEvent.setValue(selectedFeed);
     }

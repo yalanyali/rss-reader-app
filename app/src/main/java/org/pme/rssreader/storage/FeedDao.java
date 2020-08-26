@@ -54,8 +54,6 @@ public abstract class FeedDao {
     void insertItemsForFeed(Feed feed, List<Item> items) {
         // Set feedId for items for FeedWithItems relation
         for (Item item : items) {
-            Log.i("insertItemsForFeed", "FEED ID: " + feed.getFeedId());
-
             // Check if items have full links
             if (!item.getLink().contains("http")) {
                 try {

@@ -34,7 +34,6 @@ public abstract class AppDatabase extends RoomDatabase {
     private static volatile AppDatabase INSTANCE;
 
     static AppDatabase getDatabase(final Context context) {
-        Log.i( LOG_TAG_DB, "getDatabase() called" );
 
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
@@ -58,7 +57,6 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void onOpen(@NonNull SupportSQLiteDatabase db) {
             super.onOpen(db);
-            Log.i( LOG_TAG_DB, "onOpen() called" );
             databaseThreadExecutor.execute(() -> {
                 FeedDao dao = INSTANCE.feedDao();
                 // dao.deleteAll();

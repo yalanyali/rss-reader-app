@@ -11,6 +11,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
@@ -19,7 +20,11 @@ import android.view.WindowManager;
 import com.google.android.material.navigation.NavigationView;
 
 import org.pme.rssreader.core.App;
+import org.pme.rssreader.core.Constants;
+import org.pme.rssreader.storage.FeedRepository;
 import org.pme.rssreader.view.item.list.ItemListFragment;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -100,6 +105,13 @@ public class MainActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+//    /**
+//     * Returns true if the app was opened by the user and not automatically
+//     */
+//    private boolean shouldDoInitialUpdate() {
+//        return !Objects.equals(getIntent().getAction(), Constants.ALARM_RECEIVER_ACTION);
+//    }
 
     private void activateHelpOverlay() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
