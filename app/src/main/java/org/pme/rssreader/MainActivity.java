@@ -19,6 +19,10 @@ import com.google.android.material.navigation.NavigationView;
 
 import org.pme.rssreader.view.item.list.ItemListFragment;
 
+/**
+ * Main activity of the app. We use a single activity structure with fragments and navigation component.
+ *
+ */
 public class MainActivity extends AppCompatActivity {
 
     public static final String INTENT_EXTRA_NAVIGATE_TO_FEED_ID = "NAVIGATE_TO_FEED_ID";

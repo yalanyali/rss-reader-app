@@ -1,6 +1,5 @@
 package org.pme.rssreader.sync;
 
-import android.app.ActivityManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -12,17 +11,14 @@ import android.os.Build;
 import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
 
+import org.pme.rssreader.MainActivity;
 import org.pme.rssreader.R;
 import org.pme.rssreader.core.App;
 import org.pme.rssreader.core.Constants;
 import org.pme.rssreader.storage.model.Item;
-import org.pme.rssreader.MainActivity;
 
 import java.util.List;
 import java.util.Locale;
-
-import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
-import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE;
 
 public class NotificationUtils {
 

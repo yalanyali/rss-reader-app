@@ -5,12 +5,10 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
 import org.pme.rssreader.R;
-import org.pme.rssreader.storage.FeedRepository;
 
 public class AboutFragment extends Fragment {
 

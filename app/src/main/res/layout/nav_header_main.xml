@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:gravity="bottom"
-    android:id="@+id/drawer_color_container"
     android:background="@color/drawerBackgroundColor"
     android:orientation="vertical"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -13,7 +12,6 @@
     android:paddingBottom="@dimen/activity_vertical_margin" >
 
     <ImageView
-        android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/nav_header_desc"
@@ -29,7 +27,6 @@
         android:textColor="@android:color/white"/>
 
     <TextView
-        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/pme_sose_2020"

@@ -1,7 +1,6 @@
 package org.pme.rssreader.storage;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;

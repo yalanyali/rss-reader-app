@@ -1,7 +1,8 @@
 package org.pme.rssreader.network.model;
 
-import org.pme.rssreader.storage.model.Item;
+import androidx.annotation.NonNull;
 
+import org.pme.rssreader.storage.model.Item;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -37,6 +38,7 @@ public class XmlItem {
     @Element(required = false)
     public String guid;
 
+    @NonNull
     @Override
     public String toString() {
         return "RssItem [title=" + title + ", link=" + link + ", pubDate=" + pubDate
