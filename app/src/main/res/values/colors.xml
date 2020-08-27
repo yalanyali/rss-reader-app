@@ -5,5 +5,12 @@
     <color name="colorPrimary">#1976D2</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="statusBarDark">#1B1B1B</color>
+    <color name="statusBarColor">#1565C0</color>
+
+    <color name="drawerTextColor">#212121</color>
+    <color name="drawerTextColorHighlighted">#1976D2</color>
+
+    <color name="drawerBackgroundColor">#1476D2</color>
+
+    <color name="dialogButtonColor">#1976D2</color>
 </resources>

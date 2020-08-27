@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_feed_list">
+    app:startDestination="@+id/nav_feed_list"
+    tools:ignore="PrivateResource">
 
     <fragment
         android:id="@+id/nav_feed_list"
@@ -12,7 +13,11 @@
         tools:layout="@layout/fragment_feed_list" >
         <action
             android:id="@+id/action_nav_feed_list_to_containerFragment"
-            app:destination="@id/containerFragment" />
+            app:destination="@id/containerFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
     </fragment>
 
     <fragment
@@ -21,7 +26,11 @@
         android:label="{FEED_TITLE}" >
         <action
             android:id="@+id/action_containerFragment_to_itemDetailsFragment"
-            app:destination="@id/itemDetailsFragment" />
+            app:destination="@id/itemDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
         <argument
             android:name="FEED_TITLE"
             app:argType="string"
@@ -57,5 +66,23 @@
         android:name="org.pme.rssreader.view.feed.newfeed.NewFeedFragment"
         android:label="New Feed"
         tools:layout="@layout/fragment_new_feed" />
+
+    <fragment
+        android:id="@+id/nav_all_items"
+        android:name="org.pme.rssreader.view.item.list.ItemListFragment"
+        android:label="All News"
+        tools:layout="@layout/fragment_item_list" >
+        <argument
+            android:name="SHOW_ALL_ITEMS"
+            app:argType="boolean"
+            android:defaultValue="true" />
+        <action
+            android:id="@+id/action_nav_all_items_to_itemDetailsFragment"
+            app:destination="@id/itemDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 
 </navigation>

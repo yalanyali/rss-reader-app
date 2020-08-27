@@ -45,6 +45,10 @@ public class ItemViewModel extends AndroidViewModel {
         this.feedRepository.refreshFeed(feedId, refreshFeedCallback);
     }
 
+    public void refreshAllFeeds() {
+        this.feedRepository.refreshAllFeeds();
+    }
+
     public String getRelativeDateString(Date date) {
         Date currentDate = new Date();
         //noinspection UnnecessaryLocalVariable
@@ -58,6 +62,10 @@ public class ItemViewModel extends AndroidViewModel {
      */
     public void setFeedId(int feedId) {
         allItems = feedRepository.getFeedItemsObservable(feedId);
+    }
+
+    public LiveData<List<Item>> getAllItemsOnEveryFeed() {
+        return feedRepository.getAllItemsObservable();
     }
 
 }

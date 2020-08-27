@@ -1,30 +1,21 @@
 package org.pme.rssreader;
 
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
-
 import com.google.android.material.navigation.NavigationView;
 
-import org.pme.rssreader.core.App;
-import org.pme.rssreader.core.Constants;
-import org.pme.rssreader.storage.FeedRepository;
 import org.pme.rssreader.view.item.list.ItemListFragment;
-
-import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,15 +28,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // Set status bar color according to dark mode
-        // Workaround for Theme.MaterialComponents.DayNight defaulting to primaryDark regardless of night mode.
-        if (App.shouldEnableDarkMode(getApplicationContext())) {
-            Window window = MainActivity.this.getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.statusBarDark));
-        }
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

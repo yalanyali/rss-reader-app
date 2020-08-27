@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 
 import org.pme.rssreader.network.NetworkApi;
@@ -34,6 +33,7 @@ public class FeedRepository {
 
     private FeedDao feedDao;
     private LiveData<List<FeedWithItems>> allFeedsObservable;
+    LiveData<List<Item>> allItemsObservable;
 
     private static FeedRepository INSTANCE;
 
@@ -52,12 +52,17 @@ public class FeedRepository {
         AppDatabase db = AppDatabase.getDatabase(context);
         this.feedDao = db.feedDao();
         this.allFeedsObservable = this.feedDao.getFeedsObservable();
+        this.allItemsObservable = this.feedDao.getAllItemsObservable();
         // Store application context for NotificationUtils
         this.context = context.getApplicationContext();
     }
 
     public LiveData<List<FeedWithItems>> getAllFeedsObservable() {
         return allFeedsObservable;
+    }
+
+    public LiveData<List<Item>> getAllItemsObservable() {
+        return allItemsObservable;
     }
 
     public LiveData<List<Item>> getFeedItemsObservable(int feedId) {

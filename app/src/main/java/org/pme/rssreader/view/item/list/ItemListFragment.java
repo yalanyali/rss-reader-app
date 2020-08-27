@@ -2,6 +2,10 @@ package org.pme.rssreader.view.item.list;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -11,28 +15,23 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
 import org.pme.rssreader.R;
 import org.pme.rssreader.storage.FeedRepository;
 import org.pme.rssreader.view.item.ItemViewModel;
 import org.pme.rssreader.view.item.list.adapter.ItemRecyclerViewAdapter;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Items. Used both in All News and Feed List -> News
  */
 public class ItemListFragment extends Fragment {
 
     public static String EXTRA_FEED_ID = "SELECTED_FEED_ID";
-    public static String EXTRA_FEED_TITLE = "SELECTED_FEED_TITLE";
 
     private ItemViewModel itemViewModel;
 
     private int currentId;
-    private String currentTitle;
+
+    private boolean allItemsMode = false;
 
     public static ItemListFragment newInstance() {
         return new ItemListFragment();
@@ -46,9 +45,14 @@ public class ItemListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         currentId = requireArguments().getInt(EXTRA_FEED_ID);
-        currentTitle = requireArguments().getString("FEED_TITLE");
+
+        // Check if all items mode
+        if (getArguments() != null) {
+            if (getArguments().getBoolean("SHOW_ALL_ITEMS")) {
+                allItemsMode = true;
+            }
+        }
     }
 
     @Override
@@ -68,28 +72,43 @@ public class ItemListFragment extends Fragment {
 
         // Set the adapter
         NavController navController = NavHostFragment.findNavController(this);
-        final ItemRecyclerViewAdapter adapter = new ItemRecyclerViewAdapter(context, itemViewModel, navController, requireArguments().getString("FEED_TITLE"));
+        final ItemRecyclerViewAdapter adapter = new ItemRecyclerViewAdapter(context, itemViewModel, navController, requireArguments().getString("FEED_TITLE"), allItemsMode);
         recyclerView.setAdapter(adapter);
 
-        itemViewModel.getAllItems().observe(getViewLifecycleOwner(), adapter::setItems);
+        if (allItemsMode) {
+            itemViewModel.getAllItemsOnEveryFeed().observe(getViewLifecycleOwner(), adapter::setItems);
+        } else {
+            itemViewModel.getAllItems().observe(getViewLifecycleOwner(), adapter::setItems);
+        }
 
         // Swipe to refresh
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener(() -> itemViewModel.refreshFeed(currentId, new FeedRepository.RefreshFeedCallback() {
-            @Override
-            public void onSuccess() {
+        if (allItemsMode) {
+            swipeRefreshLayout.setOnRefreshListener(() -> {
+                itemViewModel.refreshAllFeeds();
                 swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(requireActivity(), R.string.feed_updated,
-                        Toast.LENGTH_LONG).show();
-            }
+                Toast.makeText(requireActivity(), R.string.updating_feeds,
+                        Toast.LENGTH_SHORT).show();
+            });
+        } else {
+            swipeRefreshLayout.setOnRefreshListener(() ->
+                itemViewModel.refreshFeed(currentId, new FeedRepository.RefreshFeedCallback() {
+                    @Override
+                    public void onSuccess() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        Toast.makeText(requireActivity(), R.string.feed_updated,
+                                Toast.LENGTH_LONG).show();
+                    }
 
-            @Override
-            public void onFailure() {
-                swipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(requireActivity(), R.string.error_while_updating_feed,
-                        Toast.LENGTH_LONG).show();
-            }
-        }));
+                    @Override
+                    public void onFailure() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        Toast.makeText(requireActivity(), R.string.error_while_updating_feed,
+                                Toast.LENGTH_LONG).show();
+                    }
+                })
+            );
+        }
 
         return view;
     }

@@ -5,8 +5,12 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_feed_list"
+            android:id="@+id/nav_all_items"
             android:icon="@drawable/ic_baseline_list_24"
+            android:title="@string/all_news"/>
+        <item
+            android:id="@+id/nav_feed_list"
+            android:icon="@drawable/ic_baseline_list_alt_24"
             android:title="@string/feed_list_title" />
         <item
             android:id="@+id/nav_settings"

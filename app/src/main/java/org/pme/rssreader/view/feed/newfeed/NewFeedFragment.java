@@ -13,11 +13,11 @@ import android.widget.EditText;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 
 import com.google.android.material.snackbar.Snackbar;
 
-import org.pme.rssreader.MainActivity;
 import org.pme.rssreader.R;
 import org.pme.rssreader.network.NetworkApi;
 import org.pme.rssreader.network.NetworkController;
@@ -74,6 +74,11 @@ public class NewFeedFragment extends DialogFragment {
         dialog.setOnShowListener(dialogInterface -> {
             Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
             button.setOnClickListener(view -> saveNewFeed());
+            // Set text color for both buttons, can only be done after .show()
+            // FIXME: XML override would be better but couldn't find the correct id.
+            int color = ContextCompat.getColor(requireContext(), R.color.dialogButtonColor);
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(color);
+            dialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(color);
         });
 
         return dialog;

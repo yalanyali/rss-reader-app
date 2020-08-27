@@ -1,7 +1,5 @@
 package org.pme.rssreader.storage;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -48,6 +46,9 @@ public abstract class FeedDao {
 
     @Query("SELECT * FROM Item WHERE feedId = :feedId ORDER BY pubDate DESC")
     public abstract LiveData<List<Item>> getFeedItemsObservable(int feedId);
+
+    @Query("SELECT * FROM Item ORDER BY pubDate DESC")
+    public abstract LiveData<List<Item>> getAllItemsObservable();
 
     @Query("SELECT * FROM Item WHERE feedId = :feedId ORDER BY pubDate DESC")
     public abstract List<Item> getFeedItems(int feedId);

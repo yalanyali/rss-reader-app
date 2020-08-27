@@ -2,20 +2,16 @@ package org.pme.rssreader.view.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
-import android.view.WindowManager;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.content.ContextCompat;
-import androidx.preference.Preference;
-import me.philio.preferencecompatextended.PreferenceFragmentCompat;
 
 import org.pme.rssreader.R;
 import org.pme.rssreader.core.App;
 import org.pme.rssreader.core.Constants;
 import org.pme.rssreader.sync.AlarmUtils;
+
+import me.philio.preferencecompatextended.PreferenceFragmentCompat;
 
 
 /**
@@ -44,7 +40,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     }
 
     private void checkAndWarnUser(SharedPreferences sharedPreferences) {
-        Log.i("SettingsFragment/checkAndWarnUser", "WARNING");
         String intervalString = sharedPreferences.getString(Constants.SETTING_SYNC_INTERVAL, "30");
         int interval = Integer.parseInt(intervalString);
         if (interval < 10) {

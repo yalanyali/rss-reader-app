@@ -3,7 +3,6 @@ package org.pme.rssreader.view.item.list.adapter;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,13 +47,15 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
     private NavController navController;
 
     private String feedTitle;
+    private boolean allItemsMode;
 
-    public ItemRecyclerViewAdapter(Context context, ItemViewModel viewModel, NavController navController, String feedTitle) {
+    public ItemRecyclerViewAdapter(Context context, ItemViewModel viewModel, NavController navController, String feedTitle, boolean allItemsMode) {
         this.inflater = LayoutInflater.from(context);
         this.viewModel = viewModel;
         this.context = context;
         this.navController = navController;
         this.feedTitle = feedTitle;
+        this.allItemsMode = allItemsMode;
     }
 
     @NonNull
@@ -116,8 +117,13 @@ public class ItemRecyclerViewAdapter extends RecyclerView.Adapter<ItemRecyclerVi
             // Details fragment is not shown, navigate.
             // Pass custom title
             Bundle bundle = new Bundle();
-            bundle.putString("FEED_TITLE", feedTitle);
-            navController.navigate(R.id.action_containerFragment_to_itemDetailsFragment, bundle);
+            if (allItemsMode) {
+                bundle.putString("FEED_TITLE", "News");
+                navController.navigate(R.id.action_nav_all_items_to_itemDetailsFragment, bundle);
+            } else {
+                bundle.putString("FEED_TITLE", feedTitle);
+                navController.navigate(R.id.action_containerFragment_to_itemDetailsFragment, bundle);
+            }
         }
     }
 
