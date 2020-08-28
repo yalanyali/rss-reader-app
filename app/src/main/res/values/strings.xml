@@ -57,9 +57,9 @@
     <string name="small_interval_warning">This option exists only for testing purposes.\n\nAndroid restricts background activities with intervals less than 10 minutes.\n\nIf the device\'s screen is off, the feeds will only be able to get updated every 10 minutes.</string>
     <string name="all_news">News</string>
 
-    <string name="name1">Yigitcan Alanyali</string>
-    <string name="name2">Andy Schleising</string>
-    <string name="name3">Wassem Alaashor</string>
-    <string name="name4">Mustapha Lahmidi</string>
+    <string name="name1">name1</string>
+    <string name="name2">name2</string>
+    <string name="name3">name3</string>
+    <string name="name4">name4</string>
 
 </resources>

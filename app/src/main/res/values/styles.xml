@@ -16,4 +16,22 @@
         <item name="android:statusBarColor">@color/statusBarColor</item>
     </style>
 
+    <style name="AlertDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <item name="buttonBarPositiveButtonStyle">@style/Alert.Button</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Alert.Button</item>
+        <item name="buttonBarNeutralButtonStyle">@style/Alert.Button</item>
+    </style>
+
+<!--    <style name="Alert.Button.Positive" parent="Widget.MaterialComponents.Button.TextButton">-->
+<!--        <item name="android:textColor">@color/dialogButtonColor</item>-->
+<!--    </style>-->
+
+<!--    <style name="Alert.Button.Neutral" parent="Widget.MaterialComponents.Button.TextButton">-->
+<!--        <item name="android:textColor">@color/dialogButtonColor</item>-->
+<!--    </style>-->
+
+    <style name="Alert.Button" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">@color/dialogButtonColor</item>
+    </style>
+
 </resources>

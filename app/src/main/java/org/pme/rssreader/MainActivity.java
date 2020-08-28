@@ -3,12 +3,10 @@ package org.pme.rssreader;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -90,22 +88,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void activateHelpOverlay() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AlertDialogTheme);
         builder.setTitle(R.string.tips);
         builder.setMessage(R.string.help_dialog_content_list_view);
         builder.setCancelable(true);
         builder.setPositiveButton(R.string.OK, (dialog, id) -> dialog.cancel());
 
         AlertDialog alert = builder.create();
-
-        alert.setOnShowListener(dialogInterface -> {
-            Button button = alert.getButton(AlertDialog.BUTTON_POSITIVE);
-            // Set text color for both buttons, can only be done after .show()
-            // FIXME: XML override would be better but couldn't find the correct id.
-            int color = ContextCompat.getColor(this, R.color.dialogButtonColor);
-            alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(color);
-            alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(color);
-        });
 
         alert.show();
     }

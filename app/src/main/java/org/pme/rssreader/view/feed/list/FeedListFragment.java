@@ -5,12 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -123,7 +121,7 @@ public class FeedListFragment extends Fragment implements FeedRecyclerViewAdapte
      */
     @Override
     public void itemDeleteRequest(Feed feed) {
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext());
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme);
 
         alertDialogBuilder.setMessage(R.string.feed_delete_alert)
                 .setTitle(R.string.warning);
@@ -138,15 +136,6 @@ public class FeedListFragment extends Fragment implements FeedRecyclerViewAdapte
                 (dialogInterface, i) -> {});
 
         AlertDialog alertDialog = alertDialogBuilder.create();
-
-        alertDialog.setOnShowListener(dialogInterface -> {
-            Button button = alertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-            // Set text color for both buttons, can only be done after .show()
-            // FIXME: XML override would be better but couldn't find the correct id.
-            int color = ContextCompat.getColor(requireContext(), R.color.dialogButtonColor);
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(color);
-            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(color);
-        });
 
         alertDialog.show();
     }

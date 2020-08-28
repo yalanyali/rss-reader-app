@@ -1,6 +1,7 @@
 package org.pme.rssreader.storage.model;
 
 import androidx.annotation.NonNull;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.Ignore;
@@ -27,6 +28,7 @@ public class Item {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
+    @ColumnInfo(name = "feedId", index = true)
     private int feedId;
 
     private String title;

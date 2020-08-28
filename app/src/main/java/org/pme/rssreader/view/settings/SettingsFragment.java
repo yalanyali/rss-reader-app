@@ -43,13 +43,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         String intervalString = sharedPreferences.getString(Constants.SETTING_SYNC_INTERVAL, "30");
         int interval = Integer.parseInt(intervalString);
         if (interval < 10) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext(), R.style.AlertDialogTheme);
             builder.setTitle(R.string.warning);
             builder.setMessage(R.string.small_interval_warning);
             builder.setCancelable(true);
             builder.setPositiveButton(R.string.OK, (dialog, id) -> dialog.cancel());
 
             AlertDialog alert = builder.create();
+
             alert.show();
         }
     }
